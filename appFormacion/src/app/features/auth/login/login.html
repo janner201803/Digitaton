@@ -1,0 +1,169 @@
+<div class="login-container">
+
+  <!-- PANEL IZQUIERDO -->
+  <section class="login-decoration">
+
+    <div class="brand">
+      <span class="brand-icon">UAO</span>
+      <span>Ciudadanía y Pensamiento Crítico</span>
+    </div>
+
+    <div class="decoration-content">
+
+      <span class="eyebrow">BIENVENIDO A TU AVENTURA</span>
+
+      <h1>Tu viaje hacia un mundo mejor comienza aquí.</h1>
+
+      <p>
+        Explora, aprende y descubre cómo tus decisiones pueden
+        transformar el mundo en un lugar más justo, consciente e inclusivo.
+      </p>
+
+      <!-- LIBRO DECORATIVO -->
+      <div class="book-illustration">
+
+        <div class="book-page left-page">
+          <span>01</span>
+          <div class="page-line"></div>
+          <div class="page-line short"></div>
+        </div>
+
+        <div class="book-page right-page">
+          <span>02</span>
+          <div class="page-line"></div>
+          <div class="page-line short"></div>
+        </div>
+
+      </div>
+
+      <!-- MENSAJE DE LA MENTORA -->
+      <div class="decoration-message">
+        <span class="mentor-icon">M</span>
+        <p>¡Cada aprendizaje es un paso hacia la transformación!</p>
+      </div>
+
+    </div>
+
+    <span class="decoration-footer">
+      APRENDE · EXPLORA · TRANSFORMA
+    </span>
+
+  </section>
+
+
+  <!-- PANEL DERECHO -->
+  <section class="login-form-section">
+
+    <div class="login-card">
+
+      <!-- MARCA PARA PANTALLAS PEQUEÑAS -->
+      <div class="mobile-brand">
+        <span class="brand-icon">UAO</span>
+        <span>Ciudadanía y Pensamiento Crítico</span>
+      </div>
+
+      <div class="form-heading">
+
+        <span class="form-label">CONTINÚA TU AVENTURA</span>
+
+        <h2>¡Hola de nuevo!</h2>
+
+        <p>
+          Ingresa tus datos para continuar tu recorrido de aprendizaje.
+        </p>
+
+      </div>
+
+
+      <!-- FORMULARIO -->
+      <form (ngSubmit)="iniciarSesion()">
+
+        <!-- CORREO -->
+        <div class="form-group">
+
+          <label for="email">Correo electrónico</label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="ejemplo@correo.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <!-- CONTRASEÑA -->
+        <div class="form-group">
+
+          <label for="password">Contraseña</label>
+
+          <div class="password-container">
+
+            <input
+              [type]="mostrarPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Ingresa tu contraseña"
+              autocomplete="current-password"
+              required
+            >
+
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="mostrarPassword = !mostrarPassword"
+            >
+              {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- MENSAJE DE ERROR -->
+        <p class="error-message" *ngIf="mensajeError">
+          {{ mensajeError }}
+        </p>
+
+
+        <!-- BOTÓN DE INGRESO -->
+        <button
+          type="submit"
+          class="login-button"
+          [disabled]="cargando"
+        >
+          {{ cargando ? 'Ingresando...' : 'Ingresar a mi aventura' }}
+        </button>
+
+      </form>
+
+
+      <!-- ENLACE AL REGISTRO -->
+      <div class="register-link">
+
+        ¿No tienes una cuenta?
+
+        <a routerLink="/register">
+          Regístrate aquí
+        </a>
+
+      </div>
+
+
+      <!-- PIE -->
+      <div class="login-footer">
+        <span>UAO</span>
+        <p>Un aprendizaje que transforma realidades.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

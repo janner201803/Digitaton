@@ -1,0 +1,308 @@
+.register-container {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #FFFFFF;
+}
+
+/* PANEL IZQUIERDO */
+
+.register-decoration {
+  background: #D97706;
+  color: #FFFFFF;
+  padding: 45px 55px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.brand-icon {
+  background: #FFFFFF;
+  color: #D97706;
+  padding: 10px 13px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.decoration-content {
+  max-width: 460px;
+  margin: auto 0;
+}
+
+.eyebrow,
+.form-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.decoration-content h1 {
+  font-size: clamp(34px, 4vw, 48px);
+  line-height: 1.15;
+  margin: 20px 0;
+}
+
+.decoration-content > p {
+  line-height: 1.7;
+  opacity: 0.95;
+}
+
+/* LIBRO DECORATIVO */
+
+.book-illustration {
+  display: flex;
+  justify-content: center;
+  margin: 45px 0;
+  perspective: 600px;
+}
+
+.book-page {
+  width: 125px;
+  height: 145px;
+  background: #FFFFFF;
+  color: #1F2937;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(31, 41, 55, 0.15);
+}
+
+.left-page {
+  border-radius: 8px 0 0 8px;
+  transform: rotateY(10deg);
+}
+
+.right-page {
+  border-radius: 0 8px 8px 0;
+  transform: rotateY(-10deg);
+}
+
+.book-page span {
+  color: #8B5CF6;
+  font-weight: 800;
+}
+
+.page-line {
+  height: 5px;
+  background: #F5F3FF;
+  margin-top: 18px;
+  border-radius: 5px;
+}
+
+.page-line.short {
+  width: 65%;
+  margin-top: 10px;
+}
+
+.decoration-message {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.mentor-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #8B5CF6;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.decoration-message p {
+  font-size: 14px;
+}
+
+.decoration-footer {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* PANEL DERECHO */
+
+.register-form-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 25px;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 410px;
+}
+
+.mobile-brand {
+  display: none;
+}
+
+.form-heading {
+  margin-bottom: 35px;
+}
+
+.form-label {
+  color: #8B5CF6;
+}
+
+.form-heading h2 {
+  color: #1F2937;
+  font-size: 32px;
+  margin: 12px 0;
+}
+
+.form-heading p {
+  color: rgba(31, 41, 55, 0.7);
+  line-height: 1.5;
+}
+
+/* FORMULARIO */
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  color: #1F2937;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 9px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #F5F3FF;
+  border-radius: 10px;
+  background: #FFFFFF;
+  color: #1F2937;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  border-color: #8B5CF6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  padding-right: 85px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #8B5CF6;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* MENSAJES */
+
+.error-message {
+  color: #1F2937;
+  background: #F5F3FF;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.success-message {
+  color: #1F2937;
+  background: #F5F3FF;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* BOTÓN */
+
+.register-button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  background: #D97706;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.register-button:hover {
+  opacity: 0.9;
+}
+
+.register-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ENLACE LOGIN */
+
+.login-link {
+  text-align: center;
+  margin-top: 28px;
+  color: #1F2937;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #8B5CF6;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+  .register-container {
+    grid-template-columns: 1fr;
+  }
+
+  .register-decoration {
+    display: none;
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #1F2937;
+    font-weight: 600;
+    margin-bottom: 45px;
+  }
+
+  .mobile-brand .brand-icon {
+    background: #D97706;
+    color: #FFFFFF;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-form-section {
+    padding: 30px 22px;
+  }
+
+  .form-heading h2 {
+    font-size: 28px;
+  }
+}
