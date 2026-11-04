@@ -1,68 +1,36 @@
 <main class="home-shell">
   <header class="topbar">
-    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio">
-      <img class="brand-logo" src="/img/logo.png" alt="">
-      <span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
-    </a>
-    <div class="topbar-actions">
-      <span class="welcome-label">Tu espacio de aprendizaje</span>
-      <button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button>
-    </div>
+    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio"><img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span></a>
+    <div class="topbar-actions"><span class="welcome-label">Tu espacio de aprendizaje</span><button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button></div>
   </header>
 
   <section class="welcome-card" aria-labelledby="welcome-title">
-    <div class="welcome-copy">
-      <span class="eyebrow"><span class="eyebrow-dot"></span> TU AVENTURA COMIENZA AQUÍ</span>
-      <h1 id="welcome-title">Un viaje por el <span>Pluralismo</span></h1>
-      <p>Aprende, reflexiona y descubre cómo tus ideas pueden ayudar a construir una sociedad más justa e inclusiva.</p>
-      <a class="primary-button" href="#ruta">Explorar mi ruta <span aria-hidden="true">→</span></a>
-      <span class="scroll-hint"><span aria-hidden="true">↓</span> Un paso a la vez, a tu ritmo</span>
-    </div>
-    <div class="welcome-art" aria-hidden="true">
-      <div class="sun"></div>
-      <div class="cloud cloud-one"></div><div class="cloud cloud-two"></div>
-      <div class="city city-back"><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="city city-front"><i></i><i></i><i></i><i></i></div>
-      <div class="book-art"><span>✦</span><strong>Ideas<br>que inspiran</strong><small>UAO · 2026</small></div>
-      <span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✧</span>
-    </div>
+    <div class="welcome-copy"><span class="eyebrow"><span class="eyebrow-dot"></span> TU AVENTURA COMIENZA AQUÍ</span><h1 id="welcome-title">Un viaje por el <span>Pluralismo</span></h1><p>Aprende, reflexiona y descubre cómo tus ideas pueden ayudar a construir una sociedad más justa e inclusiva.</p><a class="primary-button" href="#ruta">Explorar mi ruta <span aria-hidden="true">→</span></a><span class="scroll-hint"><span aria-hidden="true">↓</span> Un paso a la vez, a tu ritmo</span></div>
+    <div class="welcome-art" aria-hidden="true"><div class="sun"></div><div class="cloud cloud-one"></div><div class="cloud cloud-two"></div><div class="city city-back"><i></i><i></i><i></i><i></i><i></i></div><div class="city city-front"><i></i><i></i><i></i><i></i></div><div class="book-art"><span>✦</span><strong>Ideas<br>que inspiran</strong><small>UAO · 2026</small></div><span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✧</span></div>
     <div class="welcome-stamp" aria-hidden="true">UAO<br><span>✦</span></div>
   </section>
 
   <section class="journey-section" id="ruta" aria-labelledby="journey-title">
-    <div class="section-heading">
-      <div>
-        <span class="eyebrow">TU RECORRIDO</span>
-        <h2 id="journey-title">Tu ruta de aprendizaje</h2>
-        <p>Pequeños pasos para transformar la sociedad.</p>
-      </div>
-      <div class="progress-summary"><span>Tu progreso</span><strong>0%</strong><div class="progress-track"><span></span></div></div>
-    </div>
-
+    <div class="section-heading"><div><span class="eyebrow">TU RECORRIDO</span><h2 id="journey-title">Tu ruta de aprendizaje</h2><p>Completa cada tomo para abrir el siguiente.</p></div><div class="progress-summary"><span>Tu progreso</span><strong>{{ progress }}%</strong><div class="progress-track"><span [style.width.%]="progress"></span></div></div></div>
+    @if (loadError) { <p class="notice error" role="alert">{{ loadError }}</p> }
+    @if (loading) { <p class="notice">Cargando tu progreso…</p> }
     <div class="route-track">
-      <article class="module-card current">
-        <span class="module-number">TOMO 01</span>
-        <div class="module-icon" aria-hidden="true">✦</div>
-        <h3>Pluralismo</h3>
-        <p>Conoce el valor de nuestras diferencias.</p>
-        <span class="module-status">LISTO PARA EMPEZAR <span aria-hidden="true">→</span></span>
-      </article>
-      <article class="module-card locked">
-        <span class="module-number">TOMO 02</span>
-        <div class="module-icon" aria-hidden="true">⌑</div>
-        <h3>Ciudadanía</h3>
-        <p>Participa y construye en comunidad.</p>
-        <span class="module-status">BLOQUEADO <span aria-hidden="true">⌑</span></span>
-      </article>
-      <article class="module-card locked">
-        <span class="module-number">TOMO 03</span>
-        <div class="module-icon" aria-hidden="true">⌑</div>
-        <h3>Convivencia</h3>
-        <p>Imagina nuevas formas de vivir juntos.</p>
-        <span class="module-status">BLOQUEADO <span aria-hidden="true">⌑</span></span>
-      </article>
+      @for (tomo of tomos; track tomo.id) {
+        <button class="module-card" [class.current]="isUnlocked(tomo.id) && !completed.has(tomo.id)" [class.done]="completed.has(tomo.id)" [class.locked]="!isUnlocked(tomo.id)" [disabled]="!isUnlocked(tomo.id)" (click)="openTomo(tomo)" [attr.aria-label]="'Tomo ' + tomo.id + ': ' + tomo.title + (isUnlocked(tomo.id) ? '' : ', bloqueado')">
+          <span class="module-number">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span><span class="module-icon" aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '✦' : '⌑' }}</span><span class="module-title">{{ tomo.title }}</span><span class="module-description">{{ tomo.description }}</span><span class="module-status">{{ completed.has(tomo.id) ? 'COMPLETADO' : isUnlocked(tomo.id) ? 'LISTO PARA EMPEZAR' : 'BLOQUEADO' }} <span aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '→' : '⌑' }}</span></span>
+        </button>
+      }
     </div>
   </section>
-
   <footer class="home-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
 </main>
+
+@if (selectedTomo; as tomo) {
+  <div class="modal-backdrop" (click)="closeTomo()" (keydown.escape)="closeTomo()">
+    <section class="tomo-dialog" role="dialog" aria-modal="true" [attr.aria-labelledby]="'tomo-title-' + tomo.id" (click)="$event.stopPropagation()">
+      <header class="dialog-header"><div><span class="eyebrow">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span><h2 [id]="'tomo-title-' + tomo.id">{{ tomo.title }}</h2></div><button class="close-button" type="button" aria-label="Cerrar" (click)="closeTomo()">×</button></header>
+      <div class="lesson-grid"><div class="video-column"><h3>Video del tomo</h3><div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este tomo</small></div></div><article class="reading-column"><h3>Lee y reflexiona</h3><p>{{ tomo.reading }}</p><p class="content-note">El video y la lectura de este tomo se podrán reemplazar con el material definitivo.</p></article></div>
+      <section class="quiz-section"><span class="eyebrow">COMPRUEBA LO APRENDIDO</span><h3>{{ tomo.question }}</h3><div class="answer-list">@for (option of tomo.answers; track $index) { <button type="button" class="answer-option" [class.selected]="answer === $index" (click)="chooseAnswer($index)"><span class="radio-mark"></span>{{ option }}</button> }</div><div class="quiz-footer"><p class="feedback" [class.success]="feedback.startsWith('¡')" role="status">{{ feedback }}</p><button class="primary-button submit-button" type="button" [disabled]="answer < 0 || saving" (click)="submitAnswer()">{{ saving ? 'Guardando…' : completed.has(tomo.id) ? 'Verificar respuesta' : 'Enviar respuesta' }} <span aria-hidden="true">→</span></button></div></section>
+    </section>
+  </div>
+}
