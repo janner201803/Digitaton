@@ -1,169 +1,54 @@
-<div class="login-container">
-
-  <!-- PANEL IZQUIERDO -->
-  <section class="login-decoration">
-
-    <div class="brand">
-      <span class="brand-icon">UAO</span>
-      <span>Ciudadanía y Pensamiento Crítico</span>
-    </div>
-
-    <div class="decoration-content">
-
-      <span class="eyebrow">BIENVENIDO A TU AVENTURA</span>
-
-      <h1>Tu viaje hacia un mundo mejor comienza aquí.</h1>
-
-      <p>
-        Explora, aprende y descubre cómo tus decisiones pueden
-        transformar el mundo en un lugar más justo, consciente e inclusivo.
-      </p>
-
-      <!-- LIBRO DECORATIVO -->
-      <div class="book-illustration">
-
-        <div class="book-page left-page">
-          <span>01</span>
-          <div class="page-line"></div>
-          <div class="page-line short"></div>
-        </div>
-
-        <div class="book-page right-page">
-          <span>02</span>
-          <div class="page-line"></div>
-          <div class="page-line short"></div>
-        </div>
-
+<main class="auth-page login-page">
+  <section class="story-panel" aria-label="Bienvenida">
+    <a class="brand brand-light" routerLink="/login" aria-label="UAO">
+      <img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-name"><strong>UAO</strong><small>Universidad Autónoma<br>de Occidente</small></span>
+    </a>
+    <div class="story-copy">
+      <span class="story-kicker"><span></span> TU PRÓXIMA GRAN IDEA</span>
+      <h1>Un viaje por el <em>Pluralismo</em></h1>
+      <p>Aprende, reflexiona y descubre cómo construir una sociedad más justa, consciente e inclusiva.</p>
+      <div class="story-visual" aria-hidden="true">
+        <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+        <div class="visual-sun"></div><div class="visual-hill hill-back"></div><div class="visual-hill hill-front"></div>
+        <div class="visual-book"><span>✦</span><strong>IDEAS<br>QUE CAMBIAN<br>EL MUNDO</strong><small>UAO · 2026</small></div>
+        <span class="visual-spark spark-a">✧</span><span class="visual-spark spark-b">✦</span>
       </div>
-
-      <!-- MENSAJE DE LA MENTORA -->
-      <div class="decoration-message">
-        <span class="mentor-icon">M</span>
-        <p>¡Cada aprendizaje es un paso hacia la transformación!</p>
-      </div>
-
+      <div class="story-note"><span class="note-icon">✳</span><span><strong>Aprende a tu ritmo</strong><small>Cada perspectiva nos hace crecer.</small></span></div>
     </div>
-
-    <span class="decoration-footer">
-      APRENDE · EXPLORA · TRANSFORMA
-    </span>
-
+    <span class="story-footer">APRENDE <i>·</i> EXPLORA <i>·</i> TRANSFORMA</span>
   </section>
 
-
-  <!-- PANEL DERECHO -->
-  <section class="login-form-section">
-
-    <div class="login-card">
-
-      <!-- MARCA PARA PANTALLAS PEQUEÑAS -->
-      <div class="mobile-brand">
-        <span class="brand-icon">UAO</span>
-        <span>Ciudadanía y Pensamiento Crítico</span>
-      </div>
-
+  <section class="form-panel">
+    <div class="form-card">
+      <a class="brand brand-mobile" routerLink="/login" aria-label="UAO">
+        <img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-name"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
+      </a>
       <div class="form-heading">
-
-        <span class="form-label">CONTINÚA TU AVENTURA</span>
-
+        <span class="form-kicker">QUÉ BUENO TENERTE DE VUELTA</span>
         <h2>¡Hola de nuevo!</h2>
-
-        <p>
-          Ingresa tus datos para continuar tu recorrido de aprendizaje.
-        </p>
-
+        <p>Ingresa a tu cuenta y continúa tu recorrido de aprendizaje.</p>
       </div>
-
-
-      <!-- FORMULARIO -->
       <form (ngSubmit)="iniciarSesion()">
-
-        <!-- CORREO -->
         <div class="form-group">
-
           <label for="email">Correo electrónico</label>
-
-          <input
-            type="email"
-            id="email"
-            name="email"
-            [(ngModel)]="email"
-            placeholder="ejemplo@correo.com"
-            autocomplete="email"
-            required
-          >
-
+          <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="nombre@correo.com" autocomplete="email" required>
         </div>
-
-
-        <!-- CONTRASEÑA -->
         <div class="form-group">
-
           <label for="password">Contraseña</label>
-
           <div class="password-container">
-
-            <input
-              [type]="mostrarPassword ? 'text' : 'password'"
-              id="password"
-              name="password"
-              [(ngModel)]="password"
-              placeholder="Ingresa tu contraseña"
-              autocomplete="current-password"
-              required
-            >
-
-            <button
-              type="button"
-              class="toggle-password"
-              (click)="mostrarPassword = !mostrarPassword"
-            >
+            <input [type]="mostrarPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" placeholder="Tu contraseña" autocomplete="current-password" required>
+            <button type="button" class="toggle-password" (click)="mostrarPassword = !mostrarPassword" [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
               {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
             </button>
-
           </div>
-
         </div>
-
-
-        <!-- MENSAJE DE ERROR -->
-        <p class="error-message" *ngIf="mensajeError">
-          {{ mensajeError }}
-        </p>
-
-
-        <!-- BOTÓN DE INGRESO -->
-        <button
-          type="submit"
-          class="login-button"
-          [disabled]="cargando"
-        >
-          {{ cargando ? 'Ingresando...' : 'Ingresar a mi aventura' }}
+        <p class="message error-message" *ngIf="mensajeError" role="alert">{{ mensajeError }}</p>
+        <button type="submit" class="submit-button" [disabled]="cargando">
+          {{ cargando ? 'Ingresando...' : 'Iniciar sesión' }} <span aria-hidden="true">→</span>
         </button>
-
       </form>
-
-
-      <!-- ENLACE AL REGISTRO -->
-      <div class="register-link">
-
-        ¿No tienes una cuenta?
-
-        <a routerLink="/register">
-          Regístrate aquí
-        </a>
-
-      </div>
-
-
-      <!-- PIE -->
-      <div class="login-footer">
-        <span>UAO</span>
-        <p>Un aprendizaje que transforma realidades.</p>
-      </div>
-
+      <p class="auth-switch">¿Aún no tienes una cuenta? <a routerLink="/register">Regístrate</a></p>
+      <div class="form-footer"><span>✦</span> Un aprendizaje que transforma realidades.</div>
     </div>
-
   </section>
-
-</div>
+</main>

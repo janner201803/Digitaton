@@ -1,21 +1,68 @@
-<div style="padding: 40px; font-family: Arial;">
+<main class="home-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio">
+      <img class="brand-logo" src="/img/logo.png" alt="">
+      <span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
+    </a>
+    <div class="topbar-actions">
+      <span class="welcome-label">Tu espacio de aprendizaje</span>
+      <button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
 
-  <h1>¡Bienvenido a tu viaje por la ciudadanía!</h1>
+  <section class="welcome-card" aria-labelledby="welcome-title">
+    <div class="welcome-copy">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> TU AVENTURA COMIENZA AQUÍ</span>
+      <h1 id="welcome-title">Un viaje por el <span>Pluralismo</span></h1>
+      <p>Aprende, reflexiona y descubre cómo tus ideas pueden ayudar a construir una sociedad más justa e inclusiva.</p>
+      <a class="primary-button" href="#ruta">Explorar mi ruta <span aria-hidden="true">→</span></a>
+      <span class="scroll-hint"><span aria-hidden="true">↓</span> Un paso a la vez, a tu ritmo</span>
+    </div>
+    <div class="welcome-art" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="cloud cloud-one"></div><div class="cloud cloud-two"></div>
+      <div class="city city-back"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="city city-front"><i></i><i></i><i></i><i></i></div>
+      <div class="book-art"><span>✦</span><strong>Ideas<br>que inspiran</strong><small>UAO · 2026</small></div>
+      <span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✧</span>
+    </div>
+    <div class="welcome-stamp" aria-hidden="true">UAO<br><span>✦</span></div>
+  </section>
 
-  <p>Has iniciado sesión correctamente.</p>
+  <section class="journey-section" id="ruta" aria-labelledby="journey-title">
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">TU RECORRIDO</span>
+        <h2 id="journey-title">Tu ruta de aprendizaje</h2>
+        <p>Pequeños pasos para transformar la sociedad.</p>
+      </div>
+      <div class="progress-summary"><span>Tu progreso</span><strong>0%</strong><div class="progress-track"><span></span></div></div>
+    </div>
 
-  <button
-    (click)="cerrarSesion()"
-    style="
-      background: #D97706;
-      color: white;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    "
-  >
-    Cerrar sesión
-  </button>
+    <div class="route-track">
+      <article class="module-card current">
+        <span class="module-number">TOMO 01</span>
+        <div class="module-icon" aria-hidden="true">✦</div>
+        <h3>Pluralismo</h3>
+        <p>Conoce el valor de nuestras diferencias.</p>
+        <span class="module-status">LISTO PARA EMPEZAR <span aria-hidden="true">→</span></span>
+      </article>
+      <article class="module-card locked">
+        <span class="module-number">TOMO 02</span>
+        <div class="module-icon" aria-hidden="true">⌑</div>
+        <h3>Ciudadanía</h3>
+        <p>Participa y construye en comunidad.</p>
+        <span class="module-status">BLOQUEADO <span aria-hidden="true">⌑</span></span>
+      </article>
+      <article class="module-card locked">
+        <span class="module-number">TOMO 03</span>
+        <div class="module-icon" aria-hidden="true">⌑</div>
+        <h3>Convivencia</h3>
+        <p>Imagina nuevas formas de vivir juntos.</p>
+        <span class="module-status">BLOQUEADO <span aria-hidden="true">⌑</span></span>
+      </article>
+    </div>
+  </section>
 
-</div>
+  <footer class="home-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
+</main>
