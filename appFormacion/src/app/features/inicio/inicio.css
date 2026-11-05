@@ -727,9 +727,13 @@ h1, h2, h3, p {
   transition: transform 0.1s, box-shadow 0.1s;
 }
 
-.answer-option:hover {
+.answer-option:hover:not(:disabled) {
   transform: translate(-1px, -1px);
   box-shadow: 4px 4px 0 var(--negro);
+}
+
+.answer-option:disabled {
+  cursor: default;
 }
 
 .answer-option.selected {
@@ -783,6 +787,11 @@ h1, h2, h3, p {
 
 .feedback.success:not(:empty)::before {
   content: "✓ ";
+}
+
+.feedback.error:not(:empty) {
+  background: var(--lila);
+  color: #8f1d1d;
 }
 
 .submit-button,

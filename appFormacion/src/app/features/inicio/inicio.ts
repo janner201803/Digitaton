@@ -57,10 +57,12 @@ export class Inicio implements OnInit, OnDestroy {
   }));
   completed = new Set<number>();
   verifiedTomoIds = new Set<number>();
+  selectedAnswers = new Map<number, number>();
   showCompletionModal = false;
   selectedTomo: Tomo | null = null;
   answer = -1;
   feedback = '';
+  feedbackError = false;
   // El primer tomo siempre debe poder abrirse aunque Supabase tarde en cargar el progreso.
   loading = true;
   saving = false;
@@ -120,25 +122,43 @@ export class Inicio implements OnInit, OnDestroy {
   isUnlocked(id: number) { return id === 1 || id <= this.unlockedCount; }
   openTomo(tomo: Tomo) {
     if (!this.isUnlocked(tomo.id)) return;
-    this.selectedTomo = tomo; this.answer = -1; this.feedback = '';
+    this.selectedTomo = tomo;
+    this.answer = this.completed.has(tomo.id)
+      ? this.selectedAnswers.get(tomo.id) ?? tomo.correctAnswer
+      : -1;
+    if (this.completed.has(tomo.id)) this.verifiedTomoIds.add(tomo.id);
+    this.feedback = '';
+    this.feedbackError = false;
   }
   closeTomo() { this.selectedTomo = null; }
   closeCompletionModal() { this.showCompletionModal = false; }
-  chooseAnswer(index: number) { this.answer = index; this.feedback = ''; }
+  chooseAnswer(index: number) {
+    if (this.selectedTomo && this.completed.has(this.selectedTomo.id)) return;
+    this.answer = index;
+    this.feedback = '';
+    this.feedbackError = false;
+  }
   async submitAnswer() {
     const tomo = this.selectedTomo;
     if (!tomo || this.answer < 0 || this.saving || this.verifiedTomoIds.has(tomo.id)) return;
-    if (this.answer !== tomo.correctAnswer) { this.feedback = 'Esa respuesta no es correcta. Revisa el contenido e inténtalo de nuevo.'; return; }
+    if (this.answer !== tomo.correctAnswer) {
+      this.feedback = 'Respuesta incorrecta. Inténtalo de nuevo.';
+      this.feedbackError = true;
+      return;
+    }
     if (this.completed.has(tomo.id)) {
       this.verifiedTomoIds.add(tomo.id);
       this.feedback = '¡Correcto! Este nivel ya está completado.';
+      this.feedbackError = false;
       return;
     }
 
     this.verifiedTomoIds.add(tomo.id);
+    this.selectedAnswers.set(tomo.id, this.answer);
     this.saving = true;
     this.completed = new Set([...this.completed, tomo.id]);
     this.feedback = tomo.id < 20 ? '¡Correcto! El siguiente nivel ya está desbloqueado.' : '¡Felicitaciones! Completaste los 20 niveles.';
+    this.feedbackError = false;
     if (tomo.id === this.tomos.length) {
       this.selectedTomo = null;
       this.showCompletionModal = true;

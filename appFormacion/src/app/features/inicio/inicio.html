@@ -75,13 +75,13 @@
         <h3>{{ tomo.question }}</h3>
         <div class="answer-list">
           @for (option of tomo.answers; track $index) {
-            <button type="button" class="answer-option" [class.selected]="answer === $index" (click)="chooseAnswer($index)">
+            <button type="button" class="answer-option" [class.selected]="answer === $index" [disabled]="completed.has(tomo.id)" (click)="chooseAnswer($index)">
               <span class="radio-mark"></span>{{ option }}
             </button>
           }
         </div>
         <div class="quiz-footer">
-          <p class="feedback" [class.success]="feedback.startsWith('¡')" role="status">{{ feedback }}</p>
+          <p class="feedback" [class.success]="feedback && !feedbackError" [class.error]="feedbackError" [attr.role]="feedbackError ? 'alert' : 'status'">{{ feedback }}</p>
           @if (verifiedTomoIds.has(tomo.id) && tomo.id < 20) {
             <button class="primary-button next-button" type="button" [disabled]="saving" (click)="openTomo(tomos[tomo.id]); dialog.scrollTo({ top: 0 })">
               Siguiente nivel <span class="arrow" aria-hidden="true">▶</span>
