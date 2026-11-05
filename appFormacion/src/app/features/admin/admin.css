@@ -1,0 +1,160 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  --naranja: #E06D06;
+  --crema: #FFEBB5;
+  --lila: #F2E6FA;
+  --blanco: #FFFFFF;
+  --negro: #1C1C1C;
+  background: var(--lila);
+  color: var(--negro);
+  font-family: Arial, sans-serif;
+}
+
+.admin-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.admin-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.admin-actions,
+.admin-filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.admin-btn {
+  padding: 10px 14px;
+  border: 3px solid var(--negro);
+  background: var(--naranja);
+  color: var(--negro);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--negro);
+}
+
+.admin-btn.light {
+  background: var(--crema);
+}
+
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  text-align: center;
+  border: 3px solid var(--negro);
+  background: var(--blanco);
+  box-shadow: 4px 4px 0 var(--negro);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--naranja);
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.admin-filters {
+  margin-bottom: 16px;
+}
+
+.admin-filters input,
+.admin-filters select {
+  padding: 8px;
+  border: 3px solid var(--negro);
+  background: var(--blanco);
+  font: inherit;
+}
+
+.admin-filters input[type=search] {
+  min-width: 280px;
+}
+
+.notice {
+  padding: 10px 12px;
+  border: 3px solid var(--negro);
+  background: var(--crema);
+  font-weight: 700;
+}
+
+.notice.error {
+  background: var(--blanco);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 3px solid var(--negro);
+  background: var(--blanco);
+  box-shadow: 5px 5px 0 var(--negro);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 8px 10px;
+  border-bottom: 2px solid #1C1C1C22;
+  text-align: left;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: var(--crema);
+  border-bottom: 3px solid var(--negro);
+}
+
+@media (max-width: 720px) {
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-filters input[type=search] {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+a.admin-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13.333px;
+  line-height: normal;
+}

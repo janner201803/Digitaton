@@ -2,6 +2,25 @@ import { Injectable } from '@angular/core';
 import { createClient, RealtimeChannel, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../../enviroments/enviroment';
 
+export interface ResultadoTomo {
+  tomo_id: number;
+  intentos: number;
+  puntos: number;
+  estrellas: number;
+  completado: boolean;
+}
+
+export function calcularPuntos(intento: number): number {
+  if (intento <= 1) return 100;
+  if (intento === 2) return 80;
+  if (intento <= 4) return 60;
+  return 20;
+}
+
+export function calcularEstrellas(intento: number): number {
+  return calcularPuntos(intento) / 20;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,9 +31,7 @@ export class AuthService {
     environment.supabaseAnonKey
   );
 
-  // Iniciar sesión
   async iniciarSesion(email: string, password: string) {
-
     const { data, error } = await this.supabase.auth.signInWithPassword({
       email,
       password
@@ -23,17 +40,13 @@ export class AuthService {
     return { data, error };
   }
 
-  // Verificar si existe una sesión
   async estaAutenticado(): Promise<boolean> {
-
     const { data, error } = await this.supabase.auth.getSession();
 
     return !error && !!data.session;
   }
 
-  // Obtener usuario actual
   async obtenerUsuario() {
-
     const { data, error } = await this.supabase.auth.getUser();
 
     if (error) {
@@ -43,66 +56,34 @@ export class AuthService {
     return data.user;
   }
 
-  async obtenerTomosCompletados(): Promise<{ tomos: number[]; error: unknown }> {
+  async obtenerUserId(): Promise<string | null> {
+    const { data: { session } } = await this.supabase.auth.getSession();
+    return session?.user.id ?? null;
+  }
+
+  async obtenerResultados(): Promise<{ resultados: ResultadoTomo[]; error: unknown }> {
     try {
-      const { data: { session }, error: userError } = await this.supabase.auth.getSession();
-      const user = session?.user;
-      if (userError || !user) return { tomos: [], error: userError ?? new Error('No hay una sesión activa') };
+      const { data: { session } } = await this.supabase.auth.getSession();
+      if (!session?.user) return { resultados: [], error: new Error('No hay una sesión activa') };
       const { data, error } = await this.supabase
-        .from('progreso_tomos')
-        .select('tomo_id')
-        .eq('user_id', user.id);
-      const tomos = (data ?? []).map((row) => Number(row.tomo_id));
-      if (!error) void this.actualizarCacheTomos(tomos, user.id);
-      return { tomos, error };
+        .from('resultados_tomos')
+        .select('tomo_id, intentos, puntos, estrellas, completado')
+        .eq('user_id', session.user.id);
+      return { resultados: (data ?? []) as ResultadoTomo[], error };
     } catch (error) {
-      return { tomos: [], error };
+      return { resultados: [], error };
     }
   }
 
-  async obtenerTomosCacheados(): Promise<number[]> {
-    const { data: { session } } = await this.supabase.auth.getSession();
-    if (!session?.user) return [];
+  async registrarIntento(tomoId: number, correcto: boolean): Promise<{ resultado: ResultadoTomo | null; error: unknown }> {
     try {
-      const cached = localStorage.getItem(`progreso-tomos-${session.user.id}`);
-      return cached ? JSON.parse(cached) as number[] : [];
-    } catch { return []; }
-  }
-
-  async actualizarCacheTomos(tomos: number[], userId?: string) {
-    const sessionUserId = userId ?? (await this.supabase.auth.getSession()).data.session?.user.id;
-    if (!sessionUserId) return;
-    try { localStorage.setItem(`progreso-tomos-${sessionUserId}`, JSON.stringify(tomos)); } catch { /* El progreso remoto sigue funcionando sin caché local. */ }
-  }
-
-  async sincronizarTomosCacheados() {
-    const { data: { session }, error: sessionError } = await this.supabase.auth.getSession();
-    if (sessionError || !session?.user) return { error: sessionError ?? new Error('No hay una sesión activa') };
-    const cached = await this.obtenerTomosCacheados();
-    if (!cached.length) return { error: null };
-    const { error } = await this.supabase.from('progreso_tomos').upsert(
-      cached.map((tomo_id) => ({ user_id: session.user.id, tomo_id })),
-      { onConflict: 'user_id,tomo_id', ignoreDuplicates: true }
-    );
-    return { error };
-  }
-
-  async marcarTomoCompletado(tomoId: number) {
-    try {
-      const { data: { session }, error: userError } = await this.supabase.auth.getSession();
-      const user = session?.user;
-      if (userError || !user) return { error: userError ?? new Error('No hay una sesión activa') };
-      const { error } = await this.supabase.from('progreso_tomos').upsert(
-        { user_id: user.id, tomo_id: tomoId },
-        { onConflict: 'user_id,tomo_id', ignoreDuplicates: true }
-      );
-      if (!error) {
-        const tomos = await this.obtenerTomosCacheados();
-        if (!tomos.includes(tomoId)) await this.actualizarCacheTomos([...tomos, tomoId]);
-      }
-      return { error };
+      const { data, error } = await this.supabase.rpc('registrar_intento', {
+        p_tomo_id: tomoId,
+        p_correcto: correcto
+      });
+      return { resultado: error ? null : (data as ResultadoTomo), error };
     } catch (error) {
-      return { error };
+      return { resultado: null, error };
     }
   }
 
@@ -112,9 +93,9 @@ export class AuthService {
     if (error || !user) return { channel: null, error: error ?? new Error('No hay una sesión activa') };
 
     const channel = this.supabase
-      .channel(`progreso-tomos-${user.id}`)
+      .channel(`resultados-tomos-${user.id}`)
       .on('postgres_changes', {
-        event: '*', schema: 'public', table: 'progreso_tomos',
+        event: '*', schema: 'public', table: 'resultados_tomos',
         filter: `user_id=eq.${user.id}`
       }, onChange)
       .subscribe((status) => {
@@ -128,18 +109,26 @@ export class AuthService {
     if (channel) await this.supabase.removeChannel(channel);
   }
 
+  async esAdmin(): Promise<boolean> {
+    const { data, error } = await this.supabase.rpc('es_admin');
+    return !error && data === true;
+  }
+
+  async obtenerReporteAdmin() {
+    const { data, error } = await this.supabase.rpc('reporte_admin');
+    return { reporte: data ?? [], error };
+  }
+
   async registrarUsuario(email: string, password: string) {
     const { data, error } = await this.supabase.auth.signUp({
-        email,
-        password
+      email,
+      password
     });
 
     return { data, error };
-    }
+  }
 
-  // Cerrar sesión
   async cerrarSesion() {
-
     const { error } = await this.supabase.auth.signOut();
 
     return error;

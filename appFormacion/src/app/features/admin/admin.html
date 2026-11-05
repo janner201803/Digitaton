@@ -1,0 +1,69 @@
+<main class="admin-shell">
+  <header class="admin-top">
+    <h1>Reporte de estudiantes</h1>
+    <div class="admin-actions">
+      <a class="admin-btn" href="/admin">Reporte</a>
+      <button class="admin-btn" type="button" (click)="exportarPdf()" [disabled]="!filtradas().length || generandoPdf()">
+        {{ generandoPdf() ? 'Generando…' : '⬇ Descargar PDF' }}
+      </button>
+      <button class="admin-btn" type="button" (click)="irAInicio()">Ir al curso</button>
+      <button class="admin-btn light" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <section class="admin-stats">
+    <div class="stat"><span class="stat-value">{{ resumen().total }}</span><span class="stat-label">ESTUDIANTES</span></div>
+    <div class="stat"><span class="stat-value">{{ resumen().completaron }}</span><span class="stat-label">COMPLETARON</span></div>
+    <div class="stat"><span class="stat-value">{{ resumen().promedio }}</span><span class="stat-label">PUNTOS PROM.</span></div>
+  </section>
+
+  <section class="admin-filters">
+    <input type="search" placeholder="Buscar por correo" (input)="busqueda.set(valor($event))">
+    <select (change)="estado.set(valor($event))">
+      <option value="todos">Todos</option>
+      <option value="completo">Curso completado</option>
+      <option value="progreso">En progreso</option>
+      <option value="sin_iniciar">Sin iniciar</option>
+    </select>
+    <label>Inicio desde <input type="date" (input)="desde.set(valor($event))"></label>
+    <label>hasta <input type="date" (input)="hasta.set(valor($event))"></label>
+  </section>
+
+  @if (error()) { <p class="notice error" role="alert">{{ error() }}</p> }
+  @if (cargando()) { <p class="notice">Cargando reporte…</p> }
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Correo</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Última actividad</th>
+          <th>Niveles</th>
+          <th>Puntos</th>
+          <th>Estrellas</th>
+          <th>Intentos</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of filtradas(); track f.user_id) {
+          <tr>
+            <td>{{ f.email }}</td>
+            <td>{{ f.fecha_inicio ? (f.fecha_inicio | date:'dd/MM/yyyy HH:mm') : 'No ha iniciado' }}</td>
+            <td>{{ f.fecha_fin ? (f.fecha_fin | date:'dd/MM/yyyy HH:mm') : 'En curso' }}</td>
+            <td>{{ f.ultima_actividad ? (f.ultima_actividad | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+            <td>{{ f.niveles_completados }}/20</td>
+            <td>{{ f.puntos_totales }}</td>
+            <td>{{ f.estrellas_totales }}</td>
+            <td>{{ f.intentos_totales }}</td>
+          </tr>
+        } @empty {
+          @if (!cargando()) {
+            <tr><td colspan="8">No hay estudiantes con esos filtros.</td></tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</main>

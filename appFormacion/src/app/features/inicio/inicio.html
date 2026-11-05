@@ -21,7 +21,14 @@
     <div class="hero-text">
       <h1 id="welcome-title">Un viaje por el <em>Pluralismo</em></h1>
       <p>Aprende, reflexiona y descubre cómo tus ideas pueden ayudar a construir una sociedad más justa e inclusiva.</p>
-      <a class="primary-button" href="#ruta" (click)="$event.preventDefault(); rutaSection.scrollIntoView({ behavior: 'smooth' })">Explorar mi ruta <span class="arrow" aria-hidden="true">▶</span></a>
+      <div class="hero-actions">
+        <a class="primary-button" href="#ruta" (click)="$event.preventDefault(); rutaSection.scrollIntoView({ behavior: 'smooth' })">Explorar mi ruta <span class="arrow" aria-hidden="true">▶</span></a>
+        <button class="primary-button hero-badges-button" type="button" (click)="abrirProgreso()">
+          <span class="badges-button-icon" aria-hidden="true">🏅</span>
+          Mis insignias
+          <span class="badges-count">{{ insigniasGanadas }}/{{ insignias.length }}</span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -32,7 +39,9 @@
         <h2 id="journey-title">Tu ruta de aprendizaje</h2>
         <p>Completa cada nivel para abrir el siguiente.</p>
       </div>
-      <span class="route-count">{{ completed.size }} / 20 NIVELES</span>
+      <div class="route-meta">
+        <span class="route-count">{{ completed.size }} / 20 NIVELES · {{ totalPuntos }} PTS</span>
+      </div>
     </div>
 
     @if (loadError) { <p class="notice error" role="alert">{{ loadError }}</p> }
@@ -69,22 +78,58 @@
   <div class="modal-backdrop" (click)="closeTomo()" (keydown.escape)="closeTomo()">
     <section class="tomo-dialog" #dialog role="dialog" aria-modal="true" [attr.aria-labelledby]="'tomo-title-' + tomo.id" (click)="$event.stopPropagation()">
       <header class="dialog-header"><div><span class="eyebrow">NIVEL {{ tomo.id.toString().padStart(2, '0') }}</span><h2 [id]="'tomo-title-' + tomo.id">{{ tomo.title }}</h2></div><button class="close-button" type="button" aria-label="Cerrar" (click)="closeTomo()">×</button></header>
-      <div class="lesson-grid"><div class="video-column"><h3>Video del nivel</h3><div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este nivel</small></div></div><article class="reading-column"><h3>Lee y reflexiona</h3><p>{{ tomo.reading }}</p><p class="content-note">El video y la lectura de este nivel se podrán reemplazar con el material definitivo.</p></article></div>
+      <div class="lesson-grid">
+        <div class="video-column">
+          <h3>Video del nivel</h3>
+          @if (videoUrl; as v) {
+            <div class="video-frame">
+              <iframe [src]="v" [title]="'Video del nivel ' + tomo.id" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" allowfullscreen></iframe>
+            </div>
+          } @else if (tomo.id >= 6) {
+            <div class="video-poster-frame">
+              <img src="/img/imagenVideos.jpg" [alt]="'Imagen temporal para el video del nivel ' + tomo.id">
+            </div>
+          } @else {
+            <div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este nivel</small></div>
+          }
+        </div>
+        <article class="reading-column">
+          <h3>Lee y reflexiona</h3>
+          <p>{{ tomo.reading }}</p>
+          <p class="content-note">{{ tomo.reference }}</p>
+        </article>
+      </div>
       <section class="quiz-section">
         <span class="eyebrow">COMPRUEBA LO APRENDIDO</span>
         <h3>{{ tomo.question }}</h3>
         <div class="answer-list">
-          @for (option of tomo.answers; track $index) {
+          @for (option of respuestasMostradas; track $index) {
             <button type="button" class="answer-option" [class.selected]="answer === $index" [disabled]="completed.has(tomo.id)" (click)="chooseAnswer($index)">
               <span class="radio-mark"></span>{{ option }}
             </button>
           }
         </div>
+        @if (resultados.get(tomo.id); as r) {
+          @if (r.completado) {
+            <div class="result-box">
+              <span class="stars" [attr.aria-label]="r.estrellas + ' de 5 estrellas'">
+                @for (s of [1, 2, 3, 4, 5]; track s) {
+                  <span [class.on]="s <= r.estrellas" aria-hidden="true">★</span>
+                }
+              </span>
+              <span class="points">{{ r.puntos }} PUNTOS · {{ r.intentos }} {{ r.intentos === 1 ? 'INTENTO' : 'INTENTOS' }}</span>
+            </div>
+          }
+        }
         <div class="quiz-footer">
           <p class="feedback" [class.success]="feedback && !feedbackError" [class.error]="feedbackError" [attr.role]="feedbackError ? 'alert' : 'status'">{{ feedback }}</p>
           @if (verifiedTomoIds.has(tomo.id) && tomo.id < 20) {
             <button class="primary-button next-button" type="button" [disabled]="saving" (click)="openTomo(tomos[tomo.id]); dialog.scrollTo({ top: 0 })">
               Siguiente nivel <span class="arrow" aria-hidden="true">▶</span>
+            </button>
+          } @else if (verifiedTomoIds.has(tomo.id) && cursoCompletado) {
+            <button class="primary-button next-button" type="button" [disabled]="saving" (click)="finalizarCurso()">
+              Finalizar curso <span class="arrow" aria-hidden="true">▶</span>
             </button>
           } @else {
             <button
@@ -115,8 +160,97 @@
       <div class="completion-content">
         <span class="completion-icon" aria-hidden="true">✓</span>
         <p>¡Has completado todos los niveles! Cada idea y reflexión ayuda a construir una sociedad más justa e inclusiva.</p>
-        <button class="primary-button" type="button" (click)="closeCompletionModal()">¡Ver mi progreso! <span class="arrow" aria-hidden="true">▶</span></button>
+        <div class="reward-box">
+          <span class="reward-icon" aria-hidden="true">{{ insigniaFinal.icono }}</span>
+          <div><strong>{{ insigniaFinal.nombre }}</strong><small>Total: {{ totalPuntos }} puntos</small></div>
+        </div>
+        @if (medallaFinal; as m) {
+          <div class="reward-box">
+            <span class="reward-icon" aria-hidden="true">{{ m.icono }}</span>
+            <div><strong>{{ m.nombre }}</strong><small>{{ m.descripcion }}</small></div>
+          </div>
+        }
+        <button class="primary-button" type="button" (click)="abrirProgreso()">¡Ver mi progreso! <span class="arrow" aria-hidden="true">▶</span></button>
       </div>
+    </section>
+  </div>
+}
+
+@if (showProgressModal) {
+  <div class="modal-backdrop" (click)="closeProgreso()" (keydown.escape)="closeProgreso()">
+    <section class="tomo-dialog progress-dialog" role="dialog" aria-modal="true" aria-labelledby="progress-title" (click)="$event.stopPropagation()">
+      <header class="dialog-header">
+        <div>
+          <span class="eyebrow">TU AVANCE</span>
+          <h2 id="progress-title">Mi progreso</h2>
+        </div>
+        <button class="close-button" type="button" aria-label="Cerrar" (click)="closeProgreso()">×</button>
+      </header>
+
+      <div class="progress-body">
+        <div class="stat-grid">
+          <div class="stat"><span class="stat-value">{{ completed.size }}/20</span><span class="stat-label">NIVELES</span></div>
+          <div class="stat"><span class="stat-value">{{ totalPuntos }}</span><span class="stat-label">PUNTOS</span></div>
+          <div class="stat"><span class="stat-value">{{ insigniasGanadas }}/{{ insignias.length }}</span><span class="stat-label">INSIGNIAS</span></div>
+        </div>
+
+        <h3>Insignias de progreso</h3>
+        <div class="badge-grid">
+          @for (b of insignias; track b.tomo) {
+            <div class="badge-card" [class.earned]="completed.has(b.tomo)">
+              <span class="badge-seal" aria-hidden="true">{{ completed.has(b.tomo) ? b.icono : '🔒' }}</span>
+              <strong class="badge-card-name">{{ completed.has(b.tomo) ? b.nombre : 'Nivel ' + b.tomo }}</strong>
+              <small>{{ completed.has(b.tomo) ? b.descripcion : 'Se desbloquea al completar el nivel ' + b.tomo + '.' }}</small>
+            </div>
+          }
+        </div>
+
+        <h3>Medalla final</h3>
+        @if (medallaFinal; as m) {
+          <div class="reward-box">
+            <span class="reward-icon" aria-hidden="true">{{ m.icono }}</span>
+            <div><strong>{{ m.nombre }} · {{ totalPuntos }} puntos</strong><small>{{ m.descripcion }}</small></div>
+          </div>
+        } @else {
+          <div class="medal-locked">
+            Completa los 20 niveles para recibir tu medalla según tus puntos totales:
+            <ul class="medal-rules">
+              @for (m of medallas; track m.id) {
+                <li>{{ m.icono }} {{ m.nombre }}: {{ m.minPuntos === 0 ? 'menos puntos' : m.minPuntos + '+ puntos' }}</li>
+              }
+            </ul>
+          </div>
+        }
+
+        <h3>Resultados por nivel</h3>
+        <ul class="level-list">
+          @for (f of filasProgreso; track f.tomo.id) {
+            <li class="level-row" [class.pending]="!f.r?.completado">
+              <span class="level-row-num">{{ f.tomo.id.toString().padStart(2, '0') }}</span>
+              <span>{{ f.tomo.title }}</span>
+              @if (f.r?.completado) {
+                <span class="level-row-stars" [attr.aria-label]="f.r!.estrellas + ' de 5 estrellas'">{{ estrellasTexto(f.r!.estrellas) }}</span>
+                <span class="level-row-pts">{{ f.r!.puntos }} PTS · {{ f.r!.intentos }} {{ f.r!.intentos === 1 ? 'INTENTO' : 'INTENTOS' }}</span>
+              } @else {
+                <span class="level-row-stars">—</span>
+                <span class="level-row-pts">PENDIENTE</span>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+  </div>
+}
+
+@if (insigniaNueva; as ins) {
+  <div class="modal-backdrop badge-toast-backdrop" (click)="cerrarInsigniaNueva()" (keydown.escape)="cerrarInsigniaNueva()">
+    <section class="badge-toast" role="dialog" aria-modal="true" aria-labelledby="badge-toast-title" (click)="$event.stopPropagation()">
+      <span class="eyebrow">¡INSIGNIA DESBLOQUEADA!</span>
+      <span class="badge-toast-seal" aria-hidden="true">{{ ins.icono }}</span>
+      <h2 id="badge-toast-title">{{ ins.nombre }}</h2>
+      <p>{{ ins.descripcion }}</p>
+      <button class="primary-button" type="button" (click)="cerrarInsigniaNueva()">¡Genial! <span class="arrow" aria-hidden="true">▶</span></button>
     </section>
   </div>
 }

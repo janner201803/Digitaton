@@ -5,6 +5,7 @@ import { Register } from './features/auth/register/register';
 import { Inicio } from './features/inicio/inicio';
 
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
 
@@ -27,6 +28,13 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
 
+  // Panel de administrador
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./features/admin/admin').then(m => m.Admin)
+  },
+
   // Ruta inicial
   {
     path: '',
@@ -34,7 +42,7 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
 
-  // Rutas inexistentes
+  // Rutas inexistentes (siempre al final)
   {
     path: '**',
     redirectTo: 'login'
