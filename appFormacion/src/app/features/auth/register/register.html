@@ -1,55 +1,70 @@
 <main class="auth-page register-page">
   <section class="story-panel" aria-label="Comienza tu aventura">
-    <a class="brand brand-light" routerLink="/login" aria-label="UAO">
-      <img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-name"><strong>UAO</strong><small>Universidad Autónoma<br>de Occidente</small></span>
+    <a class="brand" routerLink="/login" aria-label="Universidad Autónoma de Occidente">
+      <img class="brand-logo" src="/img/logo.png" alt="Universidad Autónoma de Occidente">
     </a>
-    <div class="story-copy">
-      <span class="story-kicker"><span></span> COMIENZA TU AVENTURA</span>
+
+    <div class="story-visual" aria-hidden="true">
+      <img class="story-city" src="/img/ciudadPerfecta.jpg" alt="">
+      <img class="story-character" src="/img/personaje.png" alt="">
+    </div>
+
+    <div class="story-text">
       <h1>Un mundo mejor <em>comienza contigo.</em></h1>
       <p>Crea tu cuenta para explorar, aprender y construir un mundo más justo, consciente e inclusivo.</p>
-      <div class="story-visual" aria-hidden="true">
-        <img class="story-city" src="/img/ciudadPerfecta2.jpg" alt="">
-        <img class="story-character" src="/img/personaje.png" alt="">
-        <span class="story-caption">Una comunidad, muchas perspectivas <span>✦</span></span>
-      </div>
-      <div class="story-note"><span class="note-icon">✳</span><span><strong>Tu historia empieza hoy</strong><small>Una comunidad, muchas perspectivas.</small></span></div>
     </div>
-    <span class="story-footer">APRENDE <i>·</i> EXPLORA <i>·</i> TRANSFORMA</span>
   </section>
 
   <section class="form-panel">
     <div class="form-card">
+
       <a class="brand brand-mobile" routerLink="/login" aria-label="UAO">
-        <img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-name"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
+        <img class="brand-logo" src="/img/logo.png" alt="">
+        <span class="brand-name"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
       </a>
+
       <div class="form-heading">
-        <span class="form-kicker">EL PRIMER PASO ES TUYO</span>
         <h2>Crear una cuenta</h2>
         <p>Regístrate y comienza tu recorrido de aprendizaje.</p>
       </div>
+
       <form (ngSubmit)="registrar()">
         <div class="form-group">
           <label for="email">Correo electrónico</label>
           <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="nombre@correo.com" autocomplete="email" required>
         </div>
+
         <div class="form-group">
           <label for="password">Contraseña</label>
           <div class="password-container">
-            <input [type]="mostrarPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required>
-            <button type="button" class="toggle-password" (click)="mostrarPassword = !mostrarPassword" [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+            <input
+              [type]="mostrarPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="password"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+              minlength="6"
+              required>
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="mostrarPassword = !mostrarPassword"
+              [attr.aria-label]="mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'">
               {{ mostrarPassword ? 'Ocultar' : 'Mostrar' }}
             </button>
           </div>
-          <small class="field-hint">Usa al menos 6 caracteres.</small>
         </div>
+
         <p class="message error-message" *ngIf="mensajeError" role="alert">{{ mensajeError }}</p>
         <p class="message success-message" *ngIf="mensajeExito" role="status">{{ mensajeExito }}</p>
+
         <button type="submit" class="submit-button" [disabled]="cargando">
-          {{ cargando ? 'Creando cuenta...' : 'Crear mi cuenta' }} <span aria-hidden="true">→</span>
+          {{ cargando ? 'Creando cuenta...' : 'Crear mi cuenta' }} <span class="arrow" aria-hidden="true">▶</span>
         </button>
       </form>
+
       <p class="auth-switch">¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
-      <div class="form-footer"><span>✦</span> Un aprendizaje que transforma realidades.</div>
     </div>
   </section>
 </main>

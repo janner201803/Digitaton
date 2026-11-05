@@ -1,115 +1,76 @@
-<<<<<<< Updated upstream
 <main class="home-shell">
   <header class="topbar">
-    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio"><img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span></a>
-    <div class="topbar-actions"><span class="welcome-label">Tu espacio de aprendizaje</span><button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button></div>
+    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio">
+      <img class="brand-logo" src="/img/logo.png" alt="">
+    </a>
+    <div class="hud">
+      <span class="hud-label">Tu progreso</span>
+      <div class="progress-track"><span [style.width.%]="progress"></span></div>
+      <strong class="hud-value">{{ progress }}%</strong>
+    </div>
+    <button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button>
   </header>
 
-  <section class="welcome-card" aria-labelledby="welcome-title">
-    <div class="welcome-copy"><span class="eyebrow"><span class="eyebrow-dot"></span> TU AVENTURA COMIENZA AQUÍ</span><h1 id="welcome-title">Un viaje por el <span>Pluralismo</span></h1><p>Aprende, reflexiona y descubre cómo tus ideas pueden ayudar a construir una sociedad más justa e inclusiva.</p><a class="primary-button" href="#ruta">Explorar mi ruta <span aria-hidden="true">→</span></a><span class="scroll-hint"><span aria-hidden="true">↓</span> Un paso a la vez, a tu ritmo</span></div>
-    <div class="welcome-art" aria-hidden="true"><div class="sun"></div><div class="cloud cloud-one"></div><div class="cloud cloud-two"></div><div class="city city-back"><i></i><i></i><i></i><i></i><i></i></div><div class="city city-front"><i></i><i></i><i></i><i></i></div><div class="book-art"><span>✦</span><strong>Ideas<br>que inspiran</strong><small>UAO · 2026</small></div><span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✧</span></div>
-    <div class="welcome-stamp" aria-hidden="true">UAO<br><span>✦</span></div>
+  <section class="hero" aria-labelledby="welcome-title">
+    <div class="hero-visual" aria-hidden="true">
+      <img class="hero-city" src="/img/ciudadCaos.jpg" alt="">
+      <img class="hero-city-future" src="/img/ciudadPerfecta.jpg" alt="">
+      <span class="hero-divider"></span>
+      <img class="hero-character" src="/img/personaje.png" alt="">
+    </div>
+    <div class="hero-text">
+      <h1 id="welcome-title">Un viaje por el <em>Pluralismo</em></h1>
+      <p>Aprende, reflexiona y descubre cómo tus ideas pueden ayudar a construir una sociedad más justa e inclusiva.</p>
+      <a class="primary-button" href="#ruta" (click)="$event.preventDefault(); rutaSection.scrollIntoView({ behavior: 'smooth' })">Explorar mi ruta <span class="arrow" aria-hidden="true">▶</span></a>
+    </div>
   </section>
 
-  <section class="journey-section" id="ruta" aria-labelledby="journey-title">
-    <div class="section-heading"><div><span class="eyebrow">TU RECORRIDO</span><h2 id="journey-title">Tu ruta de aprendizaje</h2><p>Completa cada tomo para abrir el siguiente.</p></div><div class="progress-summary"><span>Tu progreso</span><strong>{{ progress }}%</strong><div class="progress-track"><span [style.width.%]="progress"></span></div></div></div>
+  <section class="route-section" id="ruta" #rutaSection aria-labelledby="journey-title">
+    <img class="route-bg" src="/img/ciudadPerfecta.jpg" alt="">
+    <div class="route-heading">
+      <div>
+        <h2 id="journey-title">Tu ruta de aprendizaje</h2>
+        <p>Completa cada tomo para abrir el siguiente.</p>
+      </div>
+      <span class="route-count">{{ completed.size }} / 20 TOMOS</span>
+    </div>
+
     @if (loadError) { <p class="notice error" role="alert">{{ loadError }}</p> }
     @if (loading) { <p class="notice">Cargando tu progreso…</p> }
+
     <div class="route-track">
       @for (tomo of tomos; track tomo.id) {
-        <button class="module-card" [class.current]="isUnlocked(tomo.id) && !completed.has(tomo.id)" [class.done]="completed.has(tomo.id)" [class.locked]="!isUnlocked(tomo.id)" [disabled]="!isUnlocked(tomo.id)" (click)="openTomo(tomo)" [attr.aria-label]="'Tomo ' + tomo.id + ': ' + tomo.title + (isUnlocked(tomo.id) ? '' : ', bloqueado')">
-          <span class="module-number">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span><span class="module-icon" aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '✦' : '⌑' }}</span><span class="module-title">{{ tomo.title }}</span><span class="module-description">{{ tomo.description }}</span><span class="module-status">{{ completed.has(tomo.id) ? 'COMPLETADO' : isUnlocked(tomo.id) ? 'LISTO PARA EMPEZAR' : 'BLOQUEADO' }} <span aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '→' : '⌑' }}</span></span>
+        <button
+          class="node"
+          type="button"
+          [style.--n]="tomo.id"
+          [class.current]="isUnlocked(tomo.id) && !completed.has(tomo.id)"
+          [class.done]="completed.has(tomo.id)"
+          [class.locked]="!isUnlocked(tomo.id)"
+          [disabled]="!isUnlocked(tomo.id)"
+          [attr.title]="tomo.description"
+          (click)="openTomo(tomo)"
+          [attr.aria-label]="'Tomo ' + tomo.id + ': ' + tomo.title + (isUnlocked(tomo.id) ? '' : ', bloqueado')">
+          <span class="node-icon" aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '▶' : '🔒' }}</span>
+          <span class="node-label">
+            <span class="node-number">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span>
+            <span class="node-title">{{ tomo.title }}</span>
+            <span class="node-status">{{ completed.has(tomo.id) ? 'COMPLETADO' : isUnlocked(tomo.id) ? 'LISTO PARA EMPEZAR' : 'BLOQUEADO' }}</span>
+          </span>
         </button>
       }
-=======
-<main class="learning-shell">
-  <header class="learning-header">
-    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio">
-      <img class="brand-logo" src="/img/logo.png" alt="Universidad Autónoma de Occidente">
-      <span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
-    </a>
-    <div class="header-progress"><span>Tu progreso</span><div class="progress-track"><span></span></div><strong>25%</strong></div>
-    <div class="header-actions">
-      <span class="profile-avatar"><img src="/img/personaje.png" alt=""></span>
-      <button class="logout-button" type="button" (click)="cerrarSesion()" aria-label="Cerrar sesión">↗</button>
-    </div>
-  </header>
-
-  <section class="learning-map" aria-labelledby="map-title">
-    <img class="map-city" src="/img/ciudadPerfecta2.jpg" alt="">
-    <div class="map-wash"></div>
-    <div class="map-heading">
-      <span class="eyebrow"><span class="eyebrow-dot"></span> TU RECORRIDO</span>
-      <h1 id="map-title">Tu ruta de aprendizaje</h1>
-      <p>Completa los tomos y descubre cómo transformar la sociedad.</p>
-    </div>
-    <div class="map-path" aria-label="Ruta de aprendizaje: Pluralismo disponible, Ciudadanía, Convivencia y Participación bloqueados">
-      <span class="path-line"></span>
-      <article class="map-stop active-stop">
-        <div class="stop-icon"><span>▤</span></div>
-        <strong>Tomo I</strong><small>Pluralismo</small>
-      </article>
-      <article class="map-stop locked-stop">
-        <div class="stop-icon"><span>⌑</span></div>
-        <strong>Tomo II</strong><small>Ciudadanía</small>
-      </article>
-      <article class="map-stop locked-stop">
-        <div class="stop-icon"><span>⌑</span></div>
-        <strong>Tomo III</strong><small>Convivencia</small>
-      </article>
-      <article class="map-stop locked-stop">
-        <div class="stop-icon"><span>⌑</span></div>
-        <strong>Tomo IV</strong><small>Participación</small>
-      </article>
-    </div>
-    <div class="map-tip"><span class="tip-icon">✦</span><span>Cada tomo te acerca a un mundo más justo.</span></div>
-    <span class="map-avatar"><img src="/img/personaje.png" alt=""></span>
-  </section>
-
-  <section class="world-section" aria-labelledby="world-title">
-    <div class="world-heading">
-      <div><span class="eyebrow"><span class="eyebrow-dot"></span> NUESTRAS DECISIONES TRANSFORMAN</span><h2 id="world-title">Imagina el mundo que podemos construir</h2></div>
-      <p>El cambio comienza al comprender la realidad y actuar en comunidad.</p>
-    </div>
-    <div class="world-panels">
-      <article class="world-panel">
-        <img src="/img/ciudadCaos.jpg" alt="Una ciudad marcada por el conflicto">
-        <span class="world-label">EL RETO <strong>Una realidad que podemos cambiar</strong></span>
-      </article>
-      <span class="world-arrow" aria-hidden="true">→</span>
-      <article class="world-panel">
-        <img src="/img/ciudadPerfecta2.jpg" alt="Una ciudad donde las personas conviven">
-        <span class="world-label">EL FUTURO <strong>Una sociedad que construimos juntos</strong></span>
-      </article>
     </div>
   </section>
 
-  <section class="journey-section" id="ruta" aria-labelledby="journey-title">
-    <div class="section-heading">
-      <div><span class="eyebrow"><span class="eyebrow-dot"></span> EMPIEZA POR AQUÍ</span><h2 id="journey-title">Tu primer tomo</h2></div>
-      <span class="module-count">TOMO I <span>·</span> RETO 1 DE 3</span>
->>>>>>> Stashed changes
-    </div>
-    <article class="module-card current">
-      <div class="module-icon" aria-hidden="true">✦</div>
-      <div><h3>¿Qué es el pluralismo?</h3><p>Explora cómo nuestras diferencias e ideas ayudan a construir una sociedad más justa.</p></div>
-      <span class="module-status">LISTO PARA EMPEZAR <span aria-hidden="true">→</span></span>
-    </article>
-  </section>
-<<<<<<< Updated upstream
   <footer class="home-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
-=======
-
-  <footer class="learning-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
->>>>>>> Stashed changes
 </main>
 
 @if (selectedTomo; as tomo) {
   <div class="modal-backdrop" (click)="closeTomo()" (keydown.escape)="closeTomo()">
-    <section class="tomo-dialog" role="dialog" aria-modal="true" [attr.aria-labelledby]="'tomo-title-' + tomo.id" (click)="$event.stopPropagation()">
+    <section class="tomo-dialog" #dialog role="dialog" aria-modal="true" [attr.aria-labelledby]="'tomo-title-' + tomo.id" (click)="$event.stopPropagation()">
       <header class="dialog-header"><div><span class="eyebrow">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span><h2 [id]="'tomo-title-' + tomo.id">{{ tomo.title }}</h2></div><button class="close-button" type="button" aria-label="Cerrar" (click)="closeTomo()">×</button></header>
       <div class="lesson-grid"><div class="video-column"><h3>Video del tomo</h3><div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este tomo</small></div></div><article class="reading-column"><h3>Lee y reflexiona</h3><p>{{ tomo.reading }}</p><p class="content-note">El video y la lectura de este tomo se podrán reemplazar con el material definitivo.</p></article></div>
-      <section class="quiz-section"><span class="eyebrow">COMPRUEBA LO APRENDIDO</span><h3>{{ tomo.question }}</h3><div class="answer-list">@for (option of tomo.answers; track $index) { <button type="button" class="answer-option" [class.selected]="answer === $index" (click)="chooseAnswer($index)"><span class="radio-mark"></span>{{ option }}</button> }</div><div class="quiz-footer"><p class="feedback" [class.success]="feedback.startsWith('¡')" role="status">{{ feedback }}</p><button class="primary-button submit-button" type="button" [disabled]="answer < 0 || saving" (click)="submitAnswer()">{{ saving ? 'Guardando…' : completed.has(tomo.id) ? 'Verificar respuesta' : 'Enviar respuesta' }} <span aria-hidden="true">→</span></button></div></section>
+      <section class="quiz-section"><span class="eyebrow">COMPRUEBA LO APRENDIDO</span><h3>{{ tomo.question }}</h3><div class="answer-list">@for (option of tomo.answers; track $index) { <button type="button" class="answer-option" [class.selected]="answer === $index" (click)="chooseAnswer($index)"><span class="radio-mark"></span>{{ option }}</button> }</div><div class="quiz-footer"><p class="feedback" [class.success]="feedback.startsWith('¡')" role="status">{{ feedback }}</p><div class="quiz-actions"><button class="primary-button submit-button" type="button" [disabled]="answer < 0 || saving" (click)="submitAnswer()">{{ saving ? 'Guardando…' : completed.has(tomo.id) ? 'Verificar respuesta' : 'Enviar respuesta' }} <span class="arrow" aria-hidden="true">▶</span></button>@if (completed.has(tomo.id) && tomo.id < 20) { <button class="primary-button next-button" type="button" (click)="openTomo(tomos[tomo.id]); dialog.scrollTo({ top: 0 })">Siguiente tomo <span class="arrow" aria-hidden="true">▶</span></button> }</div></div></section>
     </section>
   </div>
 }
