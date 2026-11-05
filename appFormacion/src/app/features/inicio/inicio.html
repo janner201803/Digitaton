@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <main class="home-shell">
   <header class="topbar">
     <a class="brand" routerLink="/inicio" aria-label="UAO, inicio"><img class="brand-logo" src="/img/logo.png" alt=""><span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span></a>
@@ -20,9 +21,87 @@
           <span class="module-number">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span><span class="module-icon" aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '✦' : '⌑' }}</span><span class="module-title">{{ tomo.title }}</span><span class="module-description">{{ tomo.description }}</span><span class="module-status">{{ completed.has(tomo.id) ? 'COMPLETADO' : isUnlocked(tomo.id) ? 'LISTO PARA EMPEZAR' : 'BLOQUEADO' }} <span aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '→' : '⌑' }}</span></span>
         </button>
       }
+=======
+<main class="learning-shell">
+  <header class="learning-header">
+    <a class="brand" routerLink="/inicio" aria-label="UAO, inicio">
+      <img class="brand-logo" src="/img/logo.png" alt="Universidad Autónoma de Occidente">
+      <span class="brand-copy"><strong>UAO</strong><small>Ciudadanía que transforma</small></span>
+    </a>
+    <div class="header-progress"><span>Tu progreso</span><div class="progress-track"><span></span></div><strong>25%</strong></div>
+    <div class="header-actions">
+      <span class="profile-avatar"><img src="/img/personaje.png" alt=""></span>
+      <button class="logout-button" type="button" (click)="cerrarSesion()" aria-label="Cerrar sesión">↗</button>
+    </div>
+  </header>
+
+  <section class="learning-map" aria-labelledby="map-title">
+    <img class="map-city" src="/img/ciudadPerfecta2.jpg" alt="">
+    <div class="map-wash"></div>
+    <div class="map-heading">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> TU RECORRIDO</span>
+      <h1 id="map-title">Tu ruta de aprendizaje</h1>
+      <p>Completa los tomos y descubre cómo transformar la sociedad.</p>
+    </div>
+    <div class="map-path" aria-label="Ruta de aprendizaje: Pluralismo disponible, Ciudadanía, Convivencia y Participación bloqueados">
+      <span class="path-line"></span>
+      <article class="map-stop active-stop">
+        <div class="stop-icon"><span>▤</span></div>
+        <strong>Tomo I</strong><small>Pluralismo</small>
+      </article>
+      <article class="map-stop locked-stop">
+        <div class="stop-icon"><span>⌑</span></div>
+        <strong>Tomo II</strong><small>Ciudadanía</small>
+      </article>
+      <article class="map-stop locked-stop">
+        <div class="stop-icon"><span>⌑</span></div>
+        <strong>Tomo III</strong><small>Convivencia</small>
+      </article>
+      <article class="map-stop locked-stop">
+        <div class="stop-icon"><span>⌑</span></div>
+        <strong>Tomo IV</strong><small>Participación</small>
+      </article>
+    </div>
+    <div class="map-tip"><span class="tip-icon">✦</span><span>Cada tomo te acerca a un mundo más justo.</span></div>
+    <span class="map-avatar"><img src="/img/personaje.png" alt=""></span>
+  </section>
+
+  <section class="world-section" aria-labelledby="world-title">
+    <div class="world-heading">
+      <div><span class="eyebrow"><span class="eyebrow-dot"></span> NUESTRAS DECISIONES TRANSFORMAN</span><h2 id="world-title">Imagina el mundo que podemos construir</h2></div>
+      <p>El cambio comienza al comprender la realidad y actuar en comunidad.</p>
+    </div>
+    <div class="world-panels">
+      <article class="world-panel">
+        <img src="/img/ciudadCaos.jpg" alt="Una ciudad marcada por el conflicto">
+        <span class="world-label">EL RETO <strong>Una realidad que podemos cambiar</strong></span>
+      </article>
+      <span class="world-arrow" aria-hidden="true">→</span>
+      <article class="world-panel">
+        <img src="/img/ciudadPerfecta2.jpg" alt="Una ciudad donde las personas conviven">
+        <span class="world-label">EL FUTURO <strong>Una sociedad que construimos juntos</strong></span>
+      </article>
     </div>
   </section>
+
+  <section class="journey-section" id="ruta" aria-labelledby="journey-title">
+    <div class="section-heading">
+      <div><span class="eyebrow"><span class="eyebrow-dot"></span> EMPIEZA POR AQUÍ</span><h2 id="journey-title">Tu primer tomo</h2></div>
+      <span class="module-count">TOMO I <span>·</span> RETO 1 DE 3</span>
+>>>>>>> Stashed changes
+    </div>
+    <article class="module-card current">
+      <div class="module-icon" aria-hidden="true">✦</div>
+      <div><h3>¿Qué es el pluralismo?</h3><p>Explora cómo nuestras diferencias e ideas ayudan a construir una sociedad más justa.</p></div>
+      <span class="module-status">LISTO PARA EMPEZAR <span aria-hidden="true">→</span></span>
+    </article>
+  </section>
+<<<<<<< Updated upstream
   <footer class="home-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
+=======
+
+  <footer class="learning-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
+>>>>>>> Stashed changes
 </main>
 
 @if (selectedTomo; as tomo) {
