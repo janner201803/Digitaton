@@ -47,8 +47,8 @@ export class Inicio implements OnInit, OnDestroy {
 
   tomos: Tomo[] = temas.map(([title, description], index) => ({
     id: index + 1, title, description,
-    reading: `En este tomo exploraremos ${title.toLowerCase()} y su relación con la vida en comunidad. Observa el video y piensa en las experiencias que conoces. Las diferencias de opinión, origen y experiencia pueden ayudarnos a comprender mejor los retos compartidos y a construir respuestas respetuosas.`,
-    question: `¿Qué propone este tomo sobre ${title.toLowerCase()}?`,
+    reading: `En este nivel exploraremos ${title.toLowerCase()} y su relación con la vida en comunidad. Observa el video y piensa en las experiencias que conoces. Las diferencias de opinión, origen y experiencia pueden ayudarnos a comprender mejor los retos compartidos y a construir respuestas respetuosas.`,
+    question: `¿Qué propone este nivel sobre ${title.toLowerCase()}?`,
     answers: [
       'Escuchar, reflexionar y participar en la construcción de una comunidad más justa.',
       'Evitar conversar con personas que tienen experiencias distintas.',
@@ -56,6 +56,8 @@ export class Inicio implements OnInit, OnDestroy {
     ], correctAnswer: 0
   }));
   completed = new Set<number>();
+  verifiedTomoIds = new Set<number>();
+  showCompletionModal = false;
   selectedTomo: Tomo | null = null;
   answer = -1;
   feedback = '';
@@ -121,28 +123,41 @@ export class Inicio implements OnInit, OnDestroy {
     this.selectedTomo = tomo; this.answer = -1; this.feedback = '';
   }
   closeTomo() { this.selectedTomo = null; }
+  closeCompletionModal() { this.showCompletionModal = false; }
   chooseAnswer(index: number) { this.answer = index; this.feedback = ''; }
   async submitAnswer() {
     const tomo = this.selectedTomo;
-    if (!tomo || this.answer < 0 || this.saving) return;
+    if (!tomo || this.answer < 0 || this.saving || this.verifiedTomoIds.has(tomo.id)) return;
     if (this.answer !== tomo.correctAnswer) { this.feedback = 'Esa respuesta no es correcta. Revisa el contenido e inténtalo de nuevo.'; return; }
-    if (this.completed.has(tomo.id)) { this.feedback = '¡Correcto! Este tomo ya está completado.'; return; }
-    // Confirma la respuesta y desbloquea enseguida; el guardado remoto se hace en segundo plano.
-    this.completed = new Set([...this.completed, tomo.id]);
-    await this.authService.actualizarCacheTomos([...this.completed]);
-    this.feedback = tomo.id < 20 ? '¡Correcto! El siguiente tomo ya está desbloqueado.' : '¡Felicitaciones! Completaste los 20 tomos.';
+    if (this.completed.has(tomo.id)) {
+      this.verifiedTomoIds.add(tomo.id);
+      this.feedback = '¡Correcto! Este nivel ya está completado.';
+      return;
+    }
+
+    this.verifiedTomoIds.add(tomo.id);
     this.saving = true;
-    this.changeDetector.markForCheck();
-    const timeout = new Promise<{ error: Error }>((resolve) => setTimeout(() => resolve({ error: new Error('timeout') }), 8000));
-    const result = await Promise.race([this.authService.marcarTomoCompletado(tomo.id), timeout]);
-    this.saving = false;
-    if (result.error) {
-      const errorMessage = result.error instanceof Error ? result.error.message : String(result.error);
-      this.feedback = errorMessage === 'timeout'
-        ? '¡Respuesta correcta! El progreso quedó guardado en este dispositivo; Supabase está tardando en sincronizar.'
-        : `¡Respuesta correcta! No se pudo guardar en Supabase: ${errorMessage}.`;
+    this.completed = new Set([...this.completed, tomo.id]);
+    this.feedback = tomo.id < 20 ? '¡Correcto! El siguiente nivel ya está desbloqueado.' : '¡Felicitaciones! Completaste los 20 niveles.';
+    if (tomo.id === this.tomos.length) {
+      this.selectedTomo = null;
+      this.showCompletionModal = true;
     }
     this.changeDetector.markForCheck();
+    try {
+      await this.authService.actualizarCacheTomos([...this.completed]);
+      const timeout = new Promise<{ error: Error }>((resolve) => setTimeout(() => resolve({ error: new Error('timeout') }), 8000));
+      const result = await Promise.race([this.authService.marcarTomoCompletado(tomo.id), timeout]);
+      if (result.error) {
+        const errorMessage = result.error instanceof Error ? result.error.message : String(result.error);
+        this.feedback = errorMessage === 'timeout'
+          ? '¡Respuesta correcta! El progreso quedó guardado en este dispositivo; Supabase está tardando en sincronizar.'
+          : `¡Respuesta correcta! No se pudo guardar en Supabase: ${errorMessage}.`;
+      }
+    } finally {
+      this.saving = false;
+      this.changeDetector.markForCheck();
+    }
   }
   async cerrarSesion() {
     const error = await this.authService.cerrarSesion();

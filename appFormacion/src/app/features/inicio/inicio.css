@@ -551,6 +551,39 @@ h1, h2, h3, p {
   box-shadow: 0 0 0 4px var(--crema), 12px 12px 0 4px var(--naranja);
 }
 
+.completion-dialog {
+  width: min(560px, 100%);
+}
+
+.completion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px;
+  text-align: center;
+}
+
+.completion-content p {
+  max-width: 420px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.completion-icon {
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border: 4px solid var(--negro);
+  background: var(--naranja);
+  font-family: var(--pixel);
+  font-size: 28px;
+  box-shadow: 5px 5px 0 var(--negro);
+}
+
 .dialog-header {
   position: sticky;
   top: 0;
@@ -717,14 +750,16 @@ h1, h2, h3, p {
 }
 
 .quiz-footer {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   margin-top: 18px;
 }
 
 .feedback {
+  grid-column: 1;
+  min-width: 0;
   margin: 0;
   font-size: 12px;
   font-weight: 700;
@@ -750,17 +785,20 @@ h1, h2, h3, p {
   content: "✓ ";
 }
 
-.quiz-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 14px;
-}
-
 .submit-button,
 .next-button {
-  flex: none;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.submit-button {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.next-button {
+  grid-column: 3;
+  justify-self: end;
 }
 
 .primary-button.next-button {
@@ -855,15 +893,6 @@ h1, h2, h3, p {
   .video-placeholder {
     min-height: 190px;
   }
-
-  .quiz-footer {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .quiz-actions {
-    align-self: flex-end;
-  }
 }
 
 @media (max-width: 480px) {
@@ -886,6 +915,34 @@ h1, h2, h3, p {
   .node-icon {
     width: 62px;
     height: 62px;
+  }
+
+  .quiz-footer {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .next-button {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+
+  .submit-button {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+
+  .feedback {
+    grid-column: 1 / -1;
+  }
+
+  .next-button,
+  .submit-button {
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 8px;
+    font-size: 8px;
   }
 }
 

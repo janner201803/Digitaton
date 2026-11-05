@@ -30,9 +30,9 @@
     <div class="route-heading">
       <div>
         <h2 id="journey-title">Tu ruta de aprendizaje</h2>
-        <p>Completa cada tomo para abrir el siguiente.</p>
+        <p>Completa cada nivel para abrir el siguiente.</p>
       </div>
-      <span class="route-count">{{ completed.size }} / 20 TOMOS</span>
+      <span class="route-count">{{ completed.size }} / 20 NIVELES</span>
     </div>
 
     @if (loadError) { <p class="notice error" role="alert">{{ loadError }}</p> }
@@ -50,10 +50,10 @@
           [disabled]="!isUnlocked(tomo.id)"
           [attr.title]="tomo.description"
           (click)="openTomo(tomo)"
-          [attr.aria-label]="'Tomo ' + tomo.id + ': ' + tomo.title + (isUnlocked(tomo.id) ? '' : ', bloqueado')">
+          [attr.aria-label]="'Nivel ' + tomo.id + ': ' + tomo.title + (isUnlocked(tomo.id) ? '' : ', bloqueado')">
           <span class="node-icon" aria-hidden="true">{{ completed.has(tomo.id) ? '✓' : isUnlocked(tomo.id) ? '▶' : '🔒' }}</span>
           <span class="node-label">
-            <span class="node-number">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span>
+            <span class="node-number">NIVEL {{ tomo.id.toString().padStart(2, '0') }}</span>
             <span class="node-title">{{ tomo.title }}</span>
             <span class="node-status">{{ completed.has(tomo.id) ? 'COMPLETADO' : isUnlocked(tomo.id) ? 'LISTO PARA EMPEZAR' : 'BLOQUEADO' }}</span>
           </span>
@@ -68,9 +68,55 @@
 @if (selectedTomo; as tomo) {
   <div class="modal-backdrop" (click)="closeTomo()" (keydown.escape)="closeTomo()">
     <section class="tomo-dialog" #dialog role="dialog" aria-modal="true" [attr.aria-labelledby]="'tomo-title-' + tomo.id" (click)="$event.stopPropagation()">
-      <header class="dialog-header"><div><span class="eyebrow">TOMO {{ tomo.id.toString().padStart(2, '0') }}</span><h2 [id]="'tomo-title-' + tomo.id">{{ tomo.title }}</h2></div><button class="close-button" type="button" aria-label="Cerrar" (click)="closeTomo()">×</button></header>
-      <div class="lesson-grid"><div class="video-column"><h3>Video del tomo</h3><div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este tomo</small></div></div><article class="reading-column"><h3>Lee y reflexiona</h3><p>{{ tomo.reading }}</p><p class="content-note">El video y la lectura de este tomo se podrán reemplazar con el material definitivo.</p></article></div>
-      <section class="quiz-section"><span class="eyebrow">COMPRUEBA LO APRENDIDO</span><h3>{{ tomo.question }}</h3><div class="answer-list">@for (option of tomo.answers; track $index) { <button type="button" class="answer-option" [class.selected]="answer === $index" (click)="chooseAnswer($index)"><span class="radio-mark"></span>{{ option }}</button> }</div><div class="quiz-footer"><p class="feedback" [class.success]="feedback.startsWith('¡')" role="status">{{ feedback }}</p><div class="quiz-actions"><button class="primary-button submit-button" type="button" [disabled]="answer < 0 || saving" (click)="submitAnswer()">{{ saving ? 'Guardando…' : completed.has(tomo.id) ? 'Verificar respuesta' : 'Enviar respuesta' }} <span class="arrow" aria-hidden="true">▶</span></button>@if (completed.has(tomo.id) && tomo.id < 20) { <button class="primary-button next-button" type="button" (click)="openTomo(tomos[tomo.id]); dialog.scrollTo({ top: 0 })">Siguiente tomo <span class="arrow" aria-hidden="true">▶</span></button> }</div></div></section>
+      <header class="dialog-header"><div><span class="eyebrow">NIVEL {{ tomo.id.toString().padStart(2, '0') }}</span><h2 [id]="'tomo-title-' + tomo.id">{{ tomo.title }}</h2></div><button class="close-button" type="button" aria-label="Cerrar" (click)="closeTomo()">×</button></header>
+      <div class="lesson-grid"><div class="video-column"><h3>Video del nivel</h3><div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este nivel</small></div></div><article class="reading-column"><h3>Lee y reflexiona</h3><p>{{ tomo.reading }}</p><p class="content-note">El video y la lectura de este nivel se podrán reemplazar con el material definitivo.</p></article></div>
+      <section class="quiz-section">
+        <span class="eyebrow">COMPRUEBA LO APRENDIDO</span>
+        <h3>{{ tomo.question }}</h3>
+        <div class="answer-list">
+          @for (option of tomo.answers; track $index) {
+            <button type="button" class="answer-option" [class.selected]="answer === $index" (click)="chooseAnswer($index)">
+              <span class="radio-mark"></span>{{ option }}
+            </button>
+          }
+        </div>
+        <div class="quiz-footer">
+          <p class="feedback" [class.success]="feedback.startsWith('¡')" role="status">{{ feedback }}</p>
+          @if (verifiedTomoIds.has(tomo.id) && tomo.id < 20) {
+            <button class="primary-button next-button" type="button" [disabled]="saving" (click)="openTomo(tomos[tomo.id]); dialog.scrollTo({ top: 0 })">
+              Siguiente nivel <span class="arrow" aria-hidden="true">▶</span>
+            </button>
+          } @else {
+            <button
+              class="primary-button submit-button"
+              type="button"
+              [disabled]="answer < 0 || saving || verifiedTomoIds.has(tomo.id)"
+              (click)="submitAnswer()">
+              {{ saving ? 'Guardando…' : verifiedTomoIds.has(tomo.id) ? '¡Completado!' : completed.has(tomo.id) ? 'Verificar respuesta' : 'Enviar respuesta' }}
+              <span class="arrow" aria-hidden="true">▶</span>
+            </button>
+          }
+        </div>
+      </section>
+    </section>
+  </div>
+}
+
+@if (showCompletionModal) {
+  <div class="modal-backdrop" (click)="closeCompletionModal()" (keydown.escape)="closeCompletionModal()">
+    <section class="tomo-dialog completion-dialog" role="dialog" aria-modal="true" aria-labelledby="completion-title" (click)="$event.stopPropagation()">
+      <header class="dialog-header">
+        <div>
+          <span class="eyebrow">MISIÓN COMPLETADA</span>
+          <h2 id="completion-title">¡Felicidades!</h2>
+        </div>
+        <button class="close-button" type="button" aria-label="Cerrar" (click)="closeCompletionModal()">×</button>
+      </header>
+      <div class="completion-content">
+        <span class="completion-icon" aria-hidden="true">✓</span>
+        <p>¡Has completado todos los niveles! Cada idea y reflexión ayuda a construir una sociedad más justa e inclusiva.</p>
+        <button class="primary-button" type="button" (click)="closeCompletionModal()">¡Ver mi progreso! <span class="arrow" aria-hidden="true">▶</span></button>
+      </div>
     </section>
   </div>
 }
