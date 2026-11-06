@@ -158,3 +158,67 @@ a.admin-btn {
   font-size: 13.333px;
   line-height: normal;
 }
+
+h1 {
+  font-size: clamp(18px, 2.4vw, 22px);
+}
+
+.admin-btn {
+  min-height: 40px;
+  font-size: 13px;
+}
+
+.stat-value {
+  font-size: 24px;
+  color: var(--negro);
+}
+
+.stat-label {
+  font-size: 11px;
+}
+
+.admin-filters input,
+.admin-filters select {
+  min-height: 40px;
+  font-size: 14px;
+}
+
+.admin-filters label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.notice {
+  font-size: 14px;
+}
+
+table {
+  font-size: 13px;
+}
+
+th,
+td {
+  padding: 10px 12px;
+}
+
+@media (max-width: 720px) {
+  .admin-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .stat-value {
+    font-size: 18px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .admin-actions {
+    width: 100%;
+  }
+
+  .admin-btn {
+    flex: 1 1 auto;
+  }
+}

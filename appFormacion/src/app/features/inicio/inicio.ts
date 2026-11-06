@@ -50,23 +50,22 @@ const VIDEOS: Record<number, string> = {
   2: '',
   3: '',
   4: '',
-  5: '',
-  // Agrega aquí la URL del video cuando esté disponible; mientras tanto se muestra imagenVideos.jpg.
-  6: '',
-  7: '',
-  8: '',
-  9: '',
-  10: '',
-  11: '',
-  12: '',
-  13: '',
-  14: '',
-  15: '',
-  16: '',
-  17: '',
-  18: '',
-  19: '',
-  20: ''
+  5: ''
+  // 6: 'URL_VIDEO_6',
+  // 7: 'URL_VIDEO_7',
+  // 8: 'URL_VIDEO_8',
+  // 9: 'URL_VIDEO_9',
+  // 10: 'URL_VIDEO_10',
+  // 11: 'URL_VIDEO_11',
+  // 12: 'URL_VIDEO_12',
+  // 13: 'URL_VIDEO_13',
+  // 14: 'URL_VIDEO_14',
+  // 15: 'URL_VIDEO_15',
+  // 16: 'URL_VIDEO_16',
+  // 17: 'URL_VIDEO_17',
+  // 18: 'URL_VIDEO_18',
+  // 19: 'URL_VIDEO_19',
+  // 20: 'URL_VIDEO_20'
 };
 
 function aEmbed(url: string): string {
@@ -490,7 +489,13 @@ export class Inicio implements OnInit, OnDestroy {
 
   @HostListener('window:focus')
   onWindowFocus() { void this.refreshProgress(); }
-
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    if (this.insigniaNueva) this.cerrarInsigniaNueva();
+    else if (this.showProgressModal) this.showProgressModal = false;
+    else if (this.showCompletionModal) this.showCompletionModal = false;
+    else if (this.selectedTomo) this.selectedTomo = null;
+  }
   private async refreshProgress() {
     try {
       const { resultados, error } = await this.authService.obtenerResultados();
@@ -615,7 +620,11 @@ export class Inicio implements OnInit, OnDestroy {
     this.showProgressModal = true;
   }
   closeProgreso() { this.showProgressModal = false; }
-  cerrarInsigniaNueva() { this.insigniaNueva = null; }
+  cerrarInsigniaNueva() {
+    const eraFinal = this.insigniaNueva?.tomo === 20;
+    this.insigniaNueva = null;
+    if (eraFinal) this.finalizarCurso();
+  }
   finalizarCurso() {
     this.selectedTomo = null;
     this.showCompletionModal = true;
@@ -655,7 +664,7 @@ export class Inicio implements OnInit, OnDestroy {
     const premio = `+${resultado.puntos} puntos (${resultado.estrellas} ${resultado.estrellas === 1 ? 'estrella' : 'estrellas'}).`;
     this.feedback = `${tomo.feedbackCorrect} ${premio}`;
     this.feedbackError = false;
-    if (insignia && tomo.id < 20) this.insigniaNueva = insignia;
+    if (insignia) this.insigniaNueva = insignia;
     this.changeDetector.markForCheck();
     try {
       const timeout = new Promise<{ resultado: null; error: unknown }>((resolve) => setTimeout(() => resolve({ resultado: null, error: new Error('timeout') }), 8000));

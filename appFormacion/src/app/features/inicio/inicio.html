@@ -38,7 +38,7 @@
   </section>
 
   <section class="route-section" id="ruta" #rutaSection aria-labelledby="journey-title">
-    <img class="route-bg" src="/img/ciudadPerfecta.jpg" alt="">
+    <img class="route-bg" src="/img/ciudadPerfecta.jpg" alt="" loading="lazy" decoding="async">
     <div class="route-heading">
       <div>
         <h2 id="journey-title">Tu ruta de aprendizaje</h2>
@@ -76,7 +76,11 @@
     </div>
   </section>
 
-  <footer class="home-footer"><span>UAO · Universidad Autónoma de Occidente</span><span>Aprende · Explora · Transforma</span></footer>
+  <footer class="home-footer">
+    <span>UAO · Universidad Autónoma de Occidente</span>
+    <span>Aprende · Explora · Transforma</span>
+    <span class="credits">Imágenes de uso libre</span>
+  </footer>
 </main>
 
 @if (selectedTomo; as tomo) {
@@ -107,9 +111,9 @@
       <section class="quiz-section">
         <span class="eyebrow">COMPRUEBA LO APRENDIDO</span>
         <h3>{{ tomo.question }}</h3>
-        <div class="answer-list">
+        <div class="answer-list" role="radiogroup" aria-label="Opciones de respuesta">
           @for (option of respuestasMostradas; track $index) {
-            <button type="button" class="answer-option" [class.selected]="answer === $index" [disabled]="completed.has(tomo.id)" (click)="chooseAnswer($index)">
+            <button type="button" role="radio" [attr.aria-checked]="answer === $index" class="answer-option" [class.selected]="answer === $index" [disabled]="completed.has(tomo.id)" (click)="chooseAnswer($index)">
               <span class="radio-mark"></span>{{ option }}
             </button>
           }
@@ -163,18 +167,13 @@
         <button class="close-button" type="button" aria-label="Cerrar" (click)="closeCompletionModal()">×</button>
       </header>
       <div class="completion-content">
-        <span class="completion-icon" aria-hidden="true">✓</span>
-        <p>¡Has completado todos los niveles! Cada idea y reflexión ayuda a construir una sociedad más justa e inclusiva.</p>
-        <div class="reward-box">
-          <span class="reward-icon" aria-hidden="true">{{ insigniaFinal.icono }}</span>
-          <div><strong>{{ insigniaFinal.nombre }}</strong><small>Total: {{ totalPuntos }} puntos</small></div>
-        </div>
         @if (medallaFinal; as m) {
-          <div class="reward-box">
-            <span class="reward-icon" aria-hidden="true">{{ m.icono }}</span>
-            <div><strong>{{ m.nombre }}</strong><small>{{ m.descripcion }}</small></div>
-          </div>
+          <span class="badge-toast-seal" aria-hidden="true">{{ m.icono }}</span>
+          <h3 class="completion-medal">{{ m.nombre }}</h3>
+          <span class="completion-points">{{ totalPuntos }} PUNTOS</span>
+          <p>{{ m.descripcion }}</p>
         }
+        <p class="completion-text">¡Has completado todos los niveles! Cada idea y reflexión ayuda a construir una sociedad más justa e inclusiva.</p>
         <button class="primary-button" type="button" (click)="abrirProgreso()">¡Ver mi progreso! <span class="arrow" aria-hidden="true">▶</span></button>
       </div>
     </section>

@@ -480,3 +480,81 @@
     animation: none;
   }
 }
+
+.form-panel {
+  min-height: 100dvh;
+}
+
+.story-text p {
+  font-size: 14px;
+}
+
+.form-heading h2 {
+  font-size: 12px;
+}
+
+.form-heading p {
+  font-size: 14px;
+}
+
+.form-group label {
+  font-size: 12px;
+}
+
+.form-group input {
+  height: 52px;
+  font-size: 15px;
+}
+
+.toggle-password {
+  font-size: 11px;
+}
+
+.message {
+  font-size: 13px;
+}
+
+.submit-button {
+  height: 56px;
+  font-size: 11px;
+}
+
+.auth-switch {
+  font-size: 13px;
+}
+
+@media (min-width: 761px) and (max-width: 1024px) {
+  .form-panel {
+    padding: 32px 20px;
+  }
+
+  .story-text h1 {
+    font-size: clamp(28px, 4vw, 36px);
+  }
+
+  .story-text p {
+    max-width: 250px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 760px) {
+  .form-group input {
+    font-size: 16px;
+  }
+
+  .brand-name strong {
+    font-size: 16px;
+  }
+
+  .brand-name small {
+    font-size: 11px;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 420px) {
+  .form-heading h2 {
+    font-size: 10px;
+  }
+}
