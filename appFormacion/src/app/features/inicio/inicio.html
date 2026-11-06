@@ -8,7 +8,12 @@
       <div class="progress-track"><span [style.width.%]="progress"></span></div>
       <strong class="hud-value">{{ progress }}%</strong>
     </div>
-    <button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button>
+    <div class="topbar-actions">
+      @if (esAdmin) {
+        <a class="logout-button report-button" routerLink="/admin">Ver Reporte</a>
+      }
+      <button class="logout-button" type="button" (click)="cerrarSesion()">Cerrar sesión <span aria-hidden="true">↗</span></button>
+    </div>
   </header>
 
   <section class="hero" aria-labelledby="welcome-title">

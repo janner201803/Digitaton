@@ -2,7 +2,6 @@
   <header class="admin-top">
     <h1>Reporte de estudiantes</h1>
     <div class="admin-actions">
-      <a class="admin-btn" href="/admin">Reporte</a>
       <button class="admin-btn" type="button" (click)="exportarPdf()" [disabled]="!filtradas().length || generandoPdf()">
         {{ generandoPdf() ? 'Generando…' : '⬇ Descargar PDF' }}
       </button>

@@ -90,6 +90,12 @@ h1, h2, h3, p {
   transition: width 0.5s steps(10);
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .logout-button {
   padding: 9px 12px;
   border: 3px solid var(--negro);
@@ -102,6 +108,12 @@ h1, h2, h3, p {
 
 .logout-button:hover {
   background: var(--naranja);
+}
+
+.report-button {
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .hero {

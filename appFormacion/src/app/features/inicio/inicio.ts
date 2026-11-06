@@ -456,6 +456,7 @@ export class Inicio implements OnInit, OnDestroy {
   resultados = new Map<number, ResultadoTomo>();
   private ordenes = new Map<number, number[]>();
   userId = '';
+  esAdmin = false;
   showCompletionModal = false;
   showProgressModal = false;
   insigniaNueva: Insignia | null = null;
@@ -470,6 +471,7 @@ export class Inicio implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.userId = (await this.authService.obtenerUserId()) ?? '';
+    this.esAdmin = await this.authService.esAdmin();
     this.changeDetector.markForCheck();
     void this.refreshProgress();
     void this.startProgressSubscription();

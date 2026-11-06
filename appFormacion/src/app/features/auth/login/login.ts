@@ -65,7 +65,8 @@ export class Login {
       }
 
       if (data.session) {
-        await this.router.navigate(['/inicio']);
+        const esAdmin = await this.authService.esAdmin();
+        await this.router.navigate([esAdmin ? '/admin' : '/inicio']);
       } else {
         this.mensajeError = 'No se pudo iniciar sesión. Inténtalo nuevamente.';
       }
