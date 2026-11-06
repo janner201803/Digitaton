@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -16,6 +16,7 @@ export class Login {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private changeDetector = inject(ChangeDetectorRef);
 
   email = '';
   password = '';
@@ -52,6 +53,7 @@ export class Login {
     }
 
     this.cargando = true;
+    this.changeDetector.markForCheck();
 
     try {
       const { data, error } = await this.authService.iniciarSesion(
@@ -76,6 +78,7 @@ export class Login {
       this.mensajeError = 'Ocurrió un error al iniciar sesión. Inténtalo nuevamente.';
     } finally {
       this.cargando = false;
+      this.changeDetector.markForCheck();
     }
   }
 }

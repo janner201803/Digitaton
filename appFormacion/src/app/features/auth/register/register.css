@@ -558,3 +558,29 @@
     font-size: 10px;
   }
 }
+
+.message.error-message {
+  min-height: 20px;
+  margin: -8px 0 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: #0e0d0d;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  align-content: center;
+  align-items: center;
+}
+
+.message.error-message.success-message {
+  color: #1d5e2a;
+}
+
+@media (max-width: 480px) {
+  .message.error-message {
+    min-height: 38px;
+    font-size: 12px;
+  }
+}

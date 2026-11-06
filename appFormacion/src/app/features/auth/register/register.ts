@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -15,6 +15,7 @@ export class Register {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private changeDetector = inject(ChangeDetectorRef);
 
   email = '';
   password = '';
@@ -40,6 +41,7 @@ export class Register {
     }
 
     this.cargando = true;
+    this.changeDetector.markForCheck();
 
     try {
       const { data, error } = await this.authService.registrarUsuario(
@@ -63,6 +65,7 @@ export class Register {
       this.mensajeError = 'Ocurrió un error al crear tu cuenta.';
     } finally {
       this.cargando = false;
+      this.changeDetector.markForCheck();
     }
   }
 }

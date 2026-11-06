@@ -46,11 +46,11 @@ const MEDALLAS: Medalla[] = [
 ];
 
 const VIDEOS: Record<number, string> = {
-  1: 'https://vimeo.com/1238394266/7d2223ab02?fl=ip&fe=ec&share=copy',
-  2: '',
-  3: '',
-  4: '',
-  5: ''
+  1: 'https://www.youtube.com/watch?v=InQOWpxHx3o',
+  2: 'https://www.youtube.com/watch?v=88XOCsYBvh8',
+  3: 'https://www.youtube.com/watch?v=vy0ttLphnp4',
+  4: 'https://www.youtube.com/watch?v=6dfmgK8jO8c',
+  5: 'https://www.youtube.com/watch?v=gw0IZNMeKoQ'
   // 6: 'URL_VIDEO_6',
   // 7: 'URL_VIDEO_7',
   // 8: 'URL_VIDEO_8',
