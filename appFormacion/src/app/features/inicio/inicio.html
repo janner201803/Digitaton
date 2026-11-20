@@ -94,12 +94,6 @@
             <div class="video-frame">
               <iframe [src]="v" [title]="'Video del nivel ' + tomo.id" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" allowfullscreen></iframe>
             </div>
-          } @else if (tomo.id >= 6) {
-            <div class="video-poster-frame">
-              <img src="/img/imagenVideos.webp" [alt]="'Imagen temporal para el video del nivel ' + tomo.id">
-            </div>
-          } @else {
-            <div class="video-placeholder"><span class="play-icon">▶</span><strong>Espacio para el video</strong><small>Aquí se insertará el video de este nivel</small></div>
           }
         </div>
         <article class="reading-column">

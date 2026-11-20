@@ -1,6 +1,7 @@
 :host {
   display: block;
   min-height: 100vh;
+  min-height: 100dvh;
   --naranja: #E06D06;
   --crema: #FFEBB5;
   --lila: #F2E6FA;
@@ -40,6 +41,7 @@ h1 {
 }
 
 .admin-btn {
+  min-height: 44px;
   padding: 10px 14px;
   border: 3px solid var(--negro);
   background: var(--naranja);
@@ -56,6 +58,13 @@ h1 {
 .admin-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+a.admin-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 13.333px;
+  line-height: normal;
 }
 
 .admin-stats {
@@ -82,7 +91,7 @@ h1 {
 }
 
 .stat-label {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
 }
 
@@ -92,9 +101,12 @@ h1 {
 
 .admin-filters input,
 .admin-filters select {
+  min-height: 44px;
   padding: 8px;
   border: 3px solid var(--negro);
+  border-radius: 0;
   background: var(--blanco);
+  color: var(--negro);
   font: inherit;
 }
 
@@ -142,83 +154,145 @@ th {
 }
 
 @media (max-width: 720px) {
-  .admin-stats {
-    grid-template-columns: 1fr;
+  .admin-shell {
+    padding: 12px 12px 72px;
   }
 
-  .admin-filters input[type=search] {
-    min-width: 0;
+  h1 {
+    font-size: 18px;
+  }
+
+  .admin-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     width: 100%;
+    gap: 10px;
   }
-}
 
-a.admin-btn {
-  display: inline-block;
-  text-decoration: none;
-  font-size: 13.333px;
-  line-height: normal;
-}
+  .admin-actions .admin-btn:first-child {
+    grid-column: 1 / -1;
+  }
 
-h1 {
-  font-size: clamp(18px, 2.4vw, 22px);
-}
-
-.admin-btn {
-  min-height: 40px;
-  font-size: 13px;
-}
-
-.stat-value {
-  font-size: 24px;
-  color: var(--negro);
-}
-
-.stat-label {
-  font-size: 11px;
-}
-
-.admin-filters input,
-.admin-filters select {
-  min-height: 40px;
-  font-size: 14px;
-}
-
-.admin-filters label {
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.notice {
-  font-size: 14px;
-}
-
-table {
-  font-size: 13px;
-}
-
-th,
-td {
-  padding: 10px 12px;
-}
-
-@media (max-width: 720px) {
   .admin-stats {
-    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 10px 6px;
   }
 
   .stat-value {
     font-size: 18px;
   }
 
-  .stat-label {
-    font-size: 9px;
+  .admin-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
   }
 
-  .admin-actions {
+  .admin-filters input[type=search],
+  .admin-filters select {
+    grid-column: 1 / -1;
+  }
+
+  .admin-filters label {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .admin-filters label input {
+    font-weight: 400;
+  }
+
+  .admin-filters input,
+  .admin-filters select {
     width: 100%;
+    min-width: 0;
+    font-size: 16px;
   }
 
-  .admin-btn {
-    flex: 1 1 auto;
+  .admin-filters input[type=search] {
+    min-width: 0;
+  }
+
+  .table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  table,
+  tbody {
+    display: block;
+    white-space: normal;
+  }
+
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  tr {
+    display: block;
+    margin-bottom: 14px;
+    padding: 12px 14px;
+    border: 3px solid var(--negro);
+    background: var(--blanco);
+    box-shadow: 4px 4px 0 var(--negro);
+  }
+
+  td {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 6px 0;
+    border: 0;
+    font-size: 13px;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  td::before {
+    flex: none;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  td:nth-child(2)::before { content: "Inicio"; }
+  td:nth-child(3)::before { content: "Fin"; }
+  td:nth-child(4)::before { content: "Última actividad"; }
+  td:nth-child(5)::before { content: "Niveles"; }
+  td:nth-child(6)::before { content: "Puntos"; }
+  td:nth-child(7)::before { content: "Estrellas"; }
+  td:nth-child(8)::before { content: "Intentos"; }
+
+  td:first-child {
+    display: block;
+    margin-bottom: 4px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed var(--negro);
+    font-size: 14px;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  td[colspan] {
+    border-bottom: 0;
+    text-align: center;
+  }
+}
+
+@media (max-width: 340px) {
+  .admin-stats {
+    grid-template-columns: 1fr;
   }
 }

@@ -50,27 +50,26 @@ const VIDEOS: Record<number, string> = {
   2: 'https://vimeo.com/1244229878/5c9ecb17a2?share=copy&fl=sv&fe=ci',
   3: 'https://vimeo.com/1244229879/c5653ac400?share=copy&fl=sv&fe=ci',
   4: 'https://vimeo.com/1244229936/936efdcd14?share=copy&fl=sv&fe=ci',
-  5: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy'
-  // 6: 'URL_VIDEO_6',
-  // 7: 'URL_VIDEO_7',
-  // 8: 'URL_VIDEO_8',
-  // 9: 'URL_VIDEO_9',
-  // 10: 'URL_VIDEO_10',
-  // 11: 'URL_VIDEO_11',
-  // 12: 'URL_VIDEO_12',
-  // 13: 'URL_VIDEO_13',
-  // 14: 'URL_VIDEO_14',
-  // 15: 'URL_VIDEO_15',
-  // 16: 'URL_VIDEO_16',
-  // 17: 'URL_VIDEO_17',
-  // 18: 'URL_VIDEO_18',
-  // 19: 'URL_VIDEO_19',
-  // 20: 'URL_VIDEO_20'
+  5: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  //Links no oficiales:
+  6: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  7: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  8: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  9: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  10: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  11: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  12: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  13: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  14: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  15: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  16: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  17: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  18: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  19: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy',
+  20: 'https://vimeo.com/1244229887/b63aa57cdd?share=copy'
 };
 
 function aEmbed(url: string): string {
-  const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
-  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
   if (url.includes('player.vimeo.com')) return url;
   const vm = url.match(/vimeo\.com\/(?:video\/)?(\d+)(?:\/([a-zA-Z0-9]+))?/);
   if (vm) {

@@ -636,3 +636,51 @@
     font-size: 12px;
   }
 }
+
+@media (min-width: 761px) {
+  :host {
+    display: grid;
+    align-items: center;
+    background: var(--negro);
+  }
+
+  .auth-page {
+    min-height: min(100vh, 110vw);
+  }
+
+  .story-panel {
+    min-height: calc(min(100vh, 110vw) - 16px);
+  }
+
+  .form-panel {
+    min-height: min(100dvh, 110vw);
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1024px) {
+  .story-panel {
+    align-self: center;
+    box-sizing: border-box;
+    min-height: 0;
+  }
+
+  .story-text {
+    top: clamp(95px, 15vh, 145px);
+  }
+
+  .story-text h1 {
+    font-size: clamp(23px, 3.2vw, 31px);
+    transform: translateY(-20px);
+  }
+
+  .story-text p {
+    font-size: 12px;
+    line-height: 1.4;
+    transform: translateY(5px);
+  }
+
+  .form-panel::after {
+    display: none;
+  }
+}
+
